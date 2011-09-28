@@ -1,0 +1,11 @@
+// A Gradle build file for testing the plugin built by build.gradle
+
+apply plugin: 'css'
+
+repositories {
+	mavenLocal()
+}
+
+dependencies {
+	classpath 'com.eriwen.gradle:gradle-css-plugin:0.1'	
+}

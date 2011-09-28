@@ -1,0 +1,107 @@
+apply plugin: 'groovy'
+apply plugin: 'maven'
+apply plugin: 'signing'
+
+version = '0.1'
+group = 'com.eriwen.gradle'
+artifact = 'gradle-css-plugin'
+
+configurations { 
+	deployment
+	published.extendsFrom archives, signatures
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	groovy 'org.codehaus.groovy:groovy:1.8.2'
+	compile gradleApi()
+	compile 'com.yahoo.platform.yui:yuicompressor:2.4.6'
+	runtime 'org.codehaus.groovy:groovy:1.8.2'
+	deployment 'org.apache.maven.wagon:wagon-webdav-jackrabbit:1.0-beta-7'
+}
+
+jar {
+	baseName = artifact
+}
+
+task sourceJar(type: Jar) {
+	description = 'An archive of the source code for Maven Central'
+	baseName = artifact
+	classifier = 'sources'
+	from sourceSets.main.groovy
+}
+
+task groovydocJar(type: Jar, dependsOn: groovydoc) {
+	description = 'An archive of the GroovyDocs for Maven Central'
+	baseName = artifact
+	classifier = 'javadoc'
+	from fileTree(groovydoc.destinationDir)
+}
+
+task wrapper(type: Wrapper) {
+	gradleVersion = '1.0-milestone-4'
+}
+
+artifacts { 
+	archives groovydocJar, sourceJar
+}
+
+signing {
+	sign configurations.archives
+}
+
+install {
+	repositories.mavenInstaller {
+		pom.project(pomConfiguration)
+	}
+}
+
+uploadPublished {
+	dependsOn << [signArchives]
+	repositories.mavenDeployer {
+		beforeDeployment { deployment ->
+			signPom(deployment)
+		}
+		name = 'mavenCentralReleaseDeployer'
+		repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") { 
+			authentication(userName: mavenCentralUsername, password: mavenCentralPassword)
+			releases(updatePolicy: 'always')
+			snapshots(updatePolicy: 'never')
+		}
+		pom.project(pomConfiguration)
+	}
+}
+
+/**
+ * Create POM config and return for use by other tasks.
+ */
+def getPomConfiguration() { 
+	return {
+		name('Gradle CSS Plugin')
+		description('A Gradle plugin for working with CSS.')
+		url('https://github.com/eriwen/gradle-css-plugin')
+		licenses {
+			license {
+				name 'The Apache Software License, Version 2.0'
+				url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+				distribution 'repo'
+			}
+		}
+		developers {
+			developer {
+				id('eriwen')
+				name('Eric Wendelin')
+				email('emwendelin@gmail.com')
+			}
+		}
+		scm {
+			connection('scm:https://eriwen@github.com/eriwen/gradle-css-plugin')
+			developerConnection('scm:git@github.com:eriwen/gradle-css-plugin.git')
+			url('https://github.com/eriwen/gradle-css-plugin')
+		}
+	}
+}
+
