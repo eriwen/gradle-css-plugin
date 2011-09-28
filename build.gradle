@@ -2,8 +2,10 @@ apply plugin: 'groovy'
 apply plugin: 'maven'
 apply plugin: 'signing'
 
-version = '0.1'
-group = 'com.eriwen.gradle'
+defaultTasks 'clean', 'build'
+
+version = '0.1-SNAPSHOT'
+group = 'com.eriwen'
 artifact = 'gradle-css-plugin'
 
 configurations { 
