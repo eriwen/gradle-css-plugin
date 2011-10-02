@@ -37,19 +37,19 @@ class CssPlugin implements Plugin<Project> {
 
     void applyTasks(final Project project) {
         project.task('minifyCss', type: MinifyCssTask) {
-            inputFile = project.convention.plugins.css.inputFile
-            outputFile = project.convention.plugins.css.outputFile
+            input = project.convention.plugins.css.input
+            output = project.convention.plugins.css.output
         }
 
         project.task('combineCss', type: CombineCssTask) {
-            inputFile = project.convention.plugins.css.inputFile
-            outputFile = project.convention.plugins.css.outputFile
+            input = project.convention.plugins.css.input
+            output = project.convention.plugins.css.output
         }
 
-//        project.task('gzipCss', type: com.eriwen.gradle.css.tasks.GzipCssTask) {
-//            inputFile = project.convention.plugins.css.inputFile
-//            outputFile = project.convention.plugins.css.outputFile
-//        }
+        project.task('gzipCss', type: GzipCssTask) {
+            input = project.convention.plugins.css.input
+            output = project.convention.plugins.css.output
+        }
 
 // TODO:        project.task('csslint', type: CssLintTask) {}
 

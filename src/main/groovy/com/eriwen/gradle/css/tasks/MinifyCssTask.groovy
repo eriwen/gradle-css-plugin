@@ -23,13 +23,13 @@ import com.yahoo.platform.yui.compressor.CssCompressor
 class MinifyCssTask extends DefaultTask {
 	String charset = 'UTF-8'
 	Integer lineBreakPos = -1
-	File inputFile
-	File outputFile
+	File input
+	File output
 
 	@TaskAction
 	def run() {
-		InputStreamReader reader = new InputStreamReader(new FileInputStream(inputFile), charset)
-		OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(outputFile), charset)
+		InputStreamReader reader = new InputStreamReader(new FileInputStream(input), charset)
+		OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(output), charset)
 		CssCompressor compressor = new CssCompressor(reader)
 		compressor.compress(writer, lineBreakPos)
 	}

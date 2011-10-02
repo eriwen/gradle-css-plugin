@@ -13,15 +13,19 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package com.eriwen.gradle.css
+package com.eriwen.gradle.css.tasks
 
-import org.gradle.api.tasks.InputFile
-import org.gradle.api.tasks.OutputFile
+import org.gradle.api.DefaultTask
+import org.gradle.api.tasks.TaskAction
 
-class CssPluginConvention {
-    @InputFile
-	def input
-    @OutputFile
-	def output
-	Integer lineBreakPos = -1
+class GzipCssTask extends DefaultTask {
+	File input
+    File output
+
+	@TaskAction
+	def run() {
+        String inputPath = input.canonicalPath
+		ant.gzip(src: inputPath, destfile: "${inputPath}.gz")
+		ant.move(file: "${inputPath}.gz", tofile: output.canonicalPath)
+	}
 }

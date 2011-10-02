@@ -19,15 +19,13 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 
 class CombineCssTask extends DefaultTask {
-    File inputFile
-    File outputFile
+    File input
+    File output
 
     @TaskAction
     def run() {
-        println inputFile.canonicalPath
-        println outputFile.canonicalPath
-        ant.concat(destfile: outputFile.canonicalPath) {
-            fileset(dir: inputFile.canonicalPath, includes: '*.css')
+        ant.concat(destfile: output.canonicalPath) {
+            fileset(dir: input.canonicalPath, includes: '*.css')
         }
     }
 }
