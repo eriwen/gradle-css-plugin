@@ -19,24 +19,40 @@ import org.gradle.api.logging.Logger
 import org.gradle.api.Project
 import org.gradle.api.Plugin
 
-class CssPlugin implements Plugin<Project> {
-	private Project project
-	private Logger logger
-	private CssPluginConvention cssPluginConvention
-	
-	void apply(final Project project) {
-		this.project = project
-		this.logger = logger
-		this.cssPluginConvention = new CssPluginConvention()
+import com.eriwen.gradle.css.tasks.*
 
-		project.convention.plugins.css = cssPluginConvention
-		applyTasks(project)
-	}
-	
-	void applyTasks(final Project project) {
-		project.task('minifyCss', type: com.eriwen.gradle.css.tasks.MinifyCssTask) {
-			inputFile = project.convention.plugins.css.inputFile
-			outputFile = project.convention.plugins.css.outputFile
-		}
-	}
+class CssPlugin implements Plugin<Project> {
+    private Project project
+    private Logger logger
+    private CssPluginConvention cssPluginConvention
+
+    void apply(final Project project) {
+        this.project = project
+        this.logger = logger
+        this.cssPluginConvention = new CssPluginConvention()
+
+        project.convention.plugins.css = cssPluginConvention
+        applyTasks(project)
+    }
+
+    void applyTasks(final Project project) {
+        project.task('minifyCss', type: MinifyCssTask) {
+            inputFile = project.convention.plugins.css.inputFile
+            outputFile = project.convention.plugins.css.outputFile
+        }
+
+        project.task('combineCss', type: CombineCssTask) {
+            inputFile = project.convention.plugins.css.inputFile
+            outputFile = project.convention.plugins.css.outputFile
+        }
+
+//        project.task('gzipCss', type: com.eriwen.gradle.css.tasks.GzipCssTask) {
+//            inputFile = project.convention.plugins.css.inputFile
+//            outputFile = project.convention.plugins.css.outputFile
+//        }
+
+// TODO:        project.task('csslint', type: CssLintTask) {}
+
+// TODO:       project.task('processCss', type: ProcessCssTask) {}
+    }
 }

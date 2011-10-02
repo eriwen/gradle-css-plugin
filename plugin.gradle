@@ -1,9 +1,28 @@
-apply plugin: 'css'
-
-repositories {
-	mavenLocal()
+buildscript {
+	repositories {
+		mavenLocal()
+	}
+	dependencies {
+		classpath 'com.eriwen:gradle-css-plugin:0.1-SNAPSHOT'
+	}
 }
 
-dependencies {
-	classpath 'com.eriwen:gradle-css-plugin:0.1-SNAPSHOT'
+apply plugin: 'css'
+
+combineCss {
+	input = "${projectDir}/css"
+	output = "${cssOutputDir}/all.${version}.css"
+}
+
+minifyCss {
+	dependsOn << 'combineCss'
+	input = "${cssOutputDir}/all.${version}.css"
+	output = "${cssOutputDir}/${cssOutputFile}"
+	lineBreakPos = 0
+}
+
+gzipCss {
+	dependsOn << 'minifyCss'
+	input = "${cssOutputDir}/${cssOutputFile}"
+	output = input
 }

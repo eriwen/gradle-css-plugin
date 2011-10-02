@@ -1,4 +1,4 @@
-package com.eriwen.gradle
+package com.eriwen.gradle.css
 
 class CssPluginTest {
 	

@@ -18,19 +18,16 @@ package com.eriwen.gradle.css.tasks
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 
-import com.yahoo.platform.yui.compressor.CssCompressor
+class CombineCssTask extends DefaultTask {
+    File inputFile
+    File outputFile
 
-class MinifyCssTask extends DefaultTask {
-	String charset = 'UTF-8'
-	Integer lineBreakPos = -1
-	File inputFile
-	File outputFile
-
-	@TaskAction
-	def run() {
-		InputStreamReader reader = new InputStreamReader(new FileInputStream(inputFile), charset)
-		OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(outputFile), charset)
-		CssCompressor compressor = new CssCompressor(reader)
-		compressor.compress(writer, lineBreakPos)
-	}
+    @TaskAction
+    def run() {
+        println inputFile.canonicalPath
+        println outputFile.canonicalPath
+        ant.concat(destfile: outputFile.canonicalPath) {
+            fileset(dir: inputFile.canonicalPath, includes: '*.css')
+        }
+    }
 }
