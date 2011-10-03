@@ -24,4 +24,5 @@ class CssPluginConvention {
     @OutputFile
 	def output
 	Integer lineBreakPos = -1
+    String charset = 'UTF-8'
 }

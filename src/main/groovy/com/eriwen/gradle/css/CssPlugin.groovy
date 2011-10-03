@@ -39,6 +39,8 @@ class CssPlugin implements Plugin<Project> {
         project.task('minifyCss', type: MinifyCssTask) {
             input = project.convention.plugins.css.input
             output = project.convention.plugins.css.output
+            charset = project.convention.plugins.css.charset
+            lineBreakPos = project.convention.plugins.css.lineBreakPos
         }
 
         project.task('combineCss', type: CombineCssTask) {
@@ -51,8 +53,13 @@ class CssPlugin implements Plugin<Project> {
             output = project.convention.plugins.css.output
         }
 
-// TODO:        project.task('csslint', type: CssLintTask) {}
+        // TODO: project.task('csslint', type: CssLintTask) {}
 
-// TODO:       project.task('processCss', type: ProcessCssTask) {}
+        project.task('processCss', type: ProcessCssTask) {
+            input = project.convention.plugins.css.input
+            output = project.convention.plugins.css.output
+            charset = project.convention.plugins.css.charset
+            lineBreakPos = project.convention.plugins.css.lineBreakPos
+        }
     }
 }
