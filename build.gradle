@@ -69,10 +69,10 @@ uploadPublished {
 			signPom(deployment)
 		}
 		name = 'mavenCentralReleaseDeployer'
-		repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") { 
+		repository(url: 'https://oss.sonatype.org/service/local/staging/deploy/maven2') {
 			authentication(userName: mavenCentralUsername, password: mavenCentralPassword)
 			releases(updatePolicy: 'always')
-			snapshots(updatePolicy: 'never')
+			snapshots()
 		}
 		pom.project(pomConfiguration)
 	}
