@@ -57,31 +57,27 @@ gzipCss {
 ```
 
 # Available Tasks and Options #
- - combineCss
+### combineCss ###
+ - input = [FileCollection](http://gradle.org/current/docs/javadoc/org/gradle/api/file/FileCollection.html) of files to merge
+ - output = File for combined output
 
-input = [FileCollection](http://gradle.org/current/docs/javadoc/org/gradle/api/file/FileCollection.html) of files to merge
-output = File for combined output
+### minifyCss (Uses the [YUI Compressor](http://developer.yahoo.com/yui/compressor/)) ###
+ - input = File to minify
+ - output = File for minified output
+ - *(Optional)* charset = 'UTF-8' (default) Read the input file using given charset
+ - *(Optional)* lineBreakPos = -1 (default) Insert a line break after the specified column number
 
- - minifyCss Uses the [YUI Compressor](http://developer.yahoo.com/yui/compressor/)
+### gzipCss ###
+ - input = File to compress
+ - output = File for compressed output
 
-input = File to minify
-output = File for minified output
-*(Optional)* charset = 'UTF-8' (default) Read the input file using given charset
-*(Optional)* lineBreakPos = -1 (default) Insert a line break after the specified column number
+### processCss ###
+ - input = File to minify
+ - output = File for minified output
+ - *(Optional)* charset = 'UTF-8' (default) Read the input file using given charset
+ - *(Optional)* lineBreakPos = -1 (default) Insert a line break after the specified column number
 
- - gzipCss
-
-input = File to compress
-output = File for compressed output
-
- - processCss
-
-input = File to minify
-output = File for minified output
-*(Optional)* charset = 'UTF-8' (default) Read the input file using given charset
-*(Optional)* lineBreakPos = -1 (default) Insert a line break after the specified column number
-
- - What, you want more? [Let me know!](https://github.com/eriwen/gradle-css-plugin/issues)
+What, you want more? [Let me know!](https://github.com/eriwen/gradle-css-plugin/issues)
 
 # See Also #
 The [Gradle JS Plugin](https://github.com/eriwen/gradle-js-plugin)!
