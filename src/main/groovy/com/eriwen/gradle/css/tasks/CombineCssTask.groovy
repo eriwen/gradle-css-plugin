@@ -17,15 +17,18 @@ package com.eriwen.gradle.css.tasks
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
+import org.gradle.api.file.FileCollection
 
 class CombineCssTask extends DefaultTask {
-    File input
+    FileCollection input
     File output
 
     @TaskAction
     def run() {
-        ant.concat(destfile: output.canonicalPath) {
-            fileset(dir: input.canonicalPath, includes: '*.css')
+        ant.concat(destfile: output) {
+            input.files.each {
+                fileset(file: it.canonicalPath)
+            }
         }
     }
 }

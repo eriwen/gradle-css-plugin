@@ -19,21 +19,23 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 
 import com.yahoo.platform.yui.compressor.CssCompressor
+import org.gradle.api.file.FileCollection
 
 class ProcessCssTask extends DefaultTask {
 	String charset = 'UTF-8'
 	Integer lineBreakPos = -1
-	File input
+	FileCollection input
 	File output
 
 	@TaskAction
 	def run() {
-        final String inputPath = input.canonicalPath
         final String outputPath = output.canonicalPath
         final String tempPath = "${project.buildDir}${File.separator}css${File.separator}combined.css"
 
         ant.concat(destfile: tempPath) {
-            fileset(dir: inputPath, includes: '*.css')
+            input.files.each {
+                fileset(dir: it, includes: '*.css')
+            }
         }
 
         final File combinedCssFile = new File(tempPath)
