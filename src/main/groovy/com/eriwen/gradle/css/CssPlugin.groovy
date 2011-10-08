@@ -55,7 +55,7 @@ class CssPlugin implements Plugin<Project> {
 
         // TODO: project.task('csslint', type: CssLintTask) {}
 
-        project.task('processCss', type: ProcessCssTask) {
+        project.task('css', type: CssTask) {
             input = project.convention.plugins.css.input
             output = project.convention.plugins.css.output
             charset = project.convention.plugins.css.charset

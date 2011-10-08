@@ -21,7 +21,7 @@ import org.gradle.api.tasks.TaskAction
 import com.yahoo.platform.yui.compressor.CssCompressor
 import org.gradle.api.file.FileCollection
 
-class ProcessCssTask extends DefaultTask {
+class CssTask extends DefaultTask {
 	String charset = 'UTF-8'
 	Integer lineBreakPos = -1
 	FileCollection input

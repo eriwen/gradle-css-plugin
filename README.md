@@ -18,16 +18,16 @@ buildscript {
 apply plugin: 'css'
 
 // Specify a collection of files to be combined, then minified and finally GZip compressed.
-processCss {
+css {
     input = fileTree(dir: "${projectDir}/css", include: "**/*.css")
     output = file("${buildDir}/combinedMinifiedAndGzipped.css")
 }
 ```
 
-**Need more than 1 set of files generated? Just add another *processCss* block:**
+**Need more than 1 set of files generated? Just add another *css* block:**
 
 ```groovy
-processCss {
+css {
     input = fileTree(dir: "${projectDir}/otherdir", includes: ["file1.css", "file2.css"])
     output = file("${buildDir}/teenytiny.css")
 }
@@ -71,7 +71,7 @@ gzipCss {
  - input = File to compress
  - output = File for compressed output
 
-### processCss ###
+### css ###
  - input = File to minify
  - output = File for minified output
  - *(Optional)* charset = 'UTF-8' (default) Read the input file using given charset
