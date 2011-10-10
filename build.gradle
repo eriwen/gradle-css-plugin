@@ -5,7 +5,7 @@ apply plugin: 'idea'
 
 defaultTasks 'clean', 'build'
 
-version = '0.1-SNAPSHOT'
+version = '0.1'
 group = 'com.eriwen'
 artifact = 'gradle-css-plugin'
 
@@ -81,7 +81,7 @@ uploadPublished {
 /**
  * Create POM config and return for use by other tasks.
  */
-def getPomConfiguration() { 
+def getPomConfiguration() {
 	return {
 		name('Gradle CSS Plugin')
 		description('A Gradle plugin for working with CSS.')
