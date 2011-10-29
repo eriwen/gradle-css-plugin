@@ -17,34 +17,41 @@ package com.eriwen.gradle.css.tasks
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
-
-import com.yahoo.platform.yui.compressor.CssCompressor
-import org.gradle.api.file.FileCollection
+import com.eriwen.gradle.css.CssMinifier
 
 class CssTask extends DefaultTask {
-	String charset = 'UTF-8'
-	Integer lineBreakPos = -1
-	FileCollection input
-	File output
+    private static final String COMBINED_CSS_FILE = 'combined.css'
+    private static final String TMP_DIR = 'tmp/css'
+    private static final CssMinifier MINIFIER = new CssMinifier()
 
-	@TaskAction
-	def run() {
-        final String outputPath = output.canonicalPath
-        final String tempPath = "${project.buildDir}${File.separator}css${File.separator}combined.css"
+    Integer lineBreakPos = -1
+
+    @TaskAction
+    def run() {
+        final File tempDir = makeTempDir()
+        final def outputFiles = getOutputs().files.files.toArray()
+        final String outputPath = (outputFiles[0] as File).canonicalPath
+        final String tempPath = "${tempDir.canonicalPath}/${COMBINED_CSS_FILE}"
+
+        if (outputFiles.size() != 1) {
+            throw new IllegalArgumentException('Output must be exactly 1 File object. Example: outputs.file = file("myFile")')
+        }
 
         ant.concat(destfile: tempPath) {
-            input.files.each {
+            getInputs().files.files.each {
                 fileset(dir: it, includes: '*.css')
             }
         }
 
-        final File combinedCssFile = new File(tempPath)
-        final InputStreamReader reader = new InputStreamReader(new FileInputStream(combinedCssFile), charset)
-        final OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(output), charset)
-        final CssCompressor compressor = new CssCompressor(reader)
-        compressor.compress(writer, lineBreakPos)
+        MINIFIER.minifyCssFile(new File(tempPath), outputFiles[0] as File, lineBreakPos)
 
         ant.gzip(src: outputPath, destfile: "${outputPath}.gz")
-		ant.move(file: "${outputPath}.gz", tofile: outputPath)
-	}
+        ant.move(file: "${outputPath}.gz", tofile: outputPath)
+    }
+
+    File makeTempDir() {
+        File tempDir = new File(project.buildDir, TMP_DIR)
+        tempDir.mkdirs()
+        return tempDir
+    }
 }

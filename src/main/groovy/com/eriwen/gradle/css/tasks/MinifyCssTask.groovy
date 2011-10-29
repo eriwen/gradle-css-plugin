@@ -17,20 +17,22 @@ package com.eriwen.gradle.css.tasks
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
-
-import com.yahoo.platform.yui.compressor.CssCompressor
+import com.eriwen.gradle.css.CssMinifier
 
 class MinifyCssTask extends DefaultTask {
-	String charset = 'UTF-8'
-	Integer lineBreakPos = -1
-	File input
-	File output
+    private static final CssMinifier MINIFIER = new CssMinifier()
+    Integer lineBreakPos = -1
 
-	@TaskAction
-	def run() {
-		InputStreamReader reader = new InputStreamReader(new FileInputStream(input), charset)
-		OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(output), charset)
-		CssCompressor compressor = new CssCompressor(reader)
-		compressor.compress(writer, lineBreakPos)
-	}
+    @TaskAction
+    def run() {
+        def inputFiles = getInputs().files.files.toArray()
+        def outputFiles = getOutputs().files.files.toArray()
+        if (outputFiles.size() == inputFiles.size()) {
+            for (int i = 0; i < inputFiles.size(); i++) {
+                MINIFIER.minifyCssFile(inputFiles[i] as File, outputFiles[i] as File, lineBreakPos)
+            }
+        } else {
+            throw new IllegalArgumentException("Could not map input files to output files. Found ${inputFiles.size()} inputs and ${outputFiles.size()} outputs")
+        }
+    }
 }
