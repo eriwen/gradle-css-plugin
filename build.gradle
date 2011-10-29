@@ -63,6 +63,8 @@ install {
 	}
 }
 
+// NOTE: Must still rename build/pom-default.xml to pom.xml
+// NOTE: Must rename pom-default.xml.asc to gradle-css-plugin-${version}.pom.asc
 uploadPublished {
 	dependsOn << [signArchives]
 	repositories.mavenDeployer {
