@@ -5,7 +5,7 @@ apply plugin: 'idea'
 
 defaultTasks 'clean', 'build'
 
-version = '0.1'
+version = '0.2'
 group = 'com.eriwen'
 artifact = 'gradle-css-plugin'
 
@@ -19,10 +19,10 @@ repositories {
 }
 
 dependencies {
-	groovy 'org.codehaus.groovy:groovy:1.8.2'
+	groovy 'org.codehaus.groovy:groovy:1.8.3'
 	compile gradleApi()
 	compile 'com.yahoo.platform.yui:yuicompressor:2.4.6'
-	runtime 'org.codehaus.groovy:groovy:1.8.2'
+	runtime 'org.codehaus.groovy:groovy:1.8.3'
 	deployment 'org.apache.maven.wagon:wagon-webdav-jackrabbit:1.0-beta-7'
     testCompile 'junit:junit:4.8.2'
 }

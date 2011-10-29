@@ -15,14 +15,7 @@
  */
 package com.eriwen.gradle.css
 
-import org.gradle.api.tasks.InputFile
-import org.gradle.api.tasks.OutputFile
-
 class CssPluginConvention {
-    @InputFile
-	def input
-    @OutputFile
-	def output
 	Integer lineBreakPos = -1
     String charset = 'UTF-8'
 }

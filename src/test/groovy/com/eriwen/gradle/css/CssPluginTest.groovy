@@ -34,6 +34,7 @@ class CssPluginTest {
         assertEquals 1, project.getTasksByName('combineCss', false).size()
         assertEquals 1, project.getTasksByName('minifyCss', false).size()
         assertEquals 1, project.getTasksByName('gzipCss', false).size()
+        assertEquals 1, project.getTasksByName('csslint', false).size()
         assertEquals 0, project.getTasksByName('bogus', false).size()
     }
 
@@ -41,12 +42,7 @@ class CssPluginTest {
     void shouldFailOnDownstreamTaskFailure() {
         plugin.apply(project)
 
-        CssPluginConvention pluginConvention = plugin.cssPluginConvention
-        pluginConvention.with {
-            // combine task will fail with no input or output
-            input = null
-            output = null
-        }
+        // NOTE: combineCss task will fail without input files
         project.getTasksByName('combineCss', false).iterator().next().execute()
 
         fail 'Should have gotten a TaskExecutionException'

@@ -15,20 +15,38 @@
  */
 package com.eriwen.gradle.css.tasks
 
-import org.gradle.api.tasks.Exec
 import org.gradle.api.tasks.TaskAction
+import org.gradle.api.DefaultTask
 
-class CssLintTask extends Exec {
-    String input
-    String outputFilePath
-    def options = []
+class CssLintTask extends DefaultTask {
+    private static final String CSSLINT_PATH = 'csslint-rhino.js'
+    private static final String TMP_DIR = 'tmp/css'
+    Iterable<String> options = []
 
     @TaskAction
     def run() {
-        // FIXME: writes too late
-        new File(outputFilePath).write('')
-        // TODO: package csslint.js with the plugin
-        commandLine = ["csslint"] + options + input.split(' ')
-        standardOutput = new BufferedOutputStream(new FileOutputStream(new File("${outputFilePath}/csslint.xml")))
+        File csslintJsFile = loadCssLintJs()
+        String outputPath = (getOutputs().files.files.toArray()[0] as File).canonicalPath
+        ant.java(jar: project.configurations.rhino.asPath, fork: true, output: outputPath) {
+            arg(value: csslintJsFile.canonicalPath)
+            options.each {
+                arg(value: it)
+            }
+            getInputs().files.files.each {
+                arg(value: it.canonicalPath)
+            }
+        }
+    }
+
+    File loadCssLintJs() {
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream(CSSLINT_PATH)
+        File tempDir = new File(project.buildDir, TMP_DIR)
+        tempDir.mkdirs()
+        File csslintJsFile = new File(tempDir, CSSLINT_PATH)
+        if (!csslintJsFile.exists()) {
+            csslintJsFile << inputStream
+        }
+        inputStream.close()
+        return csslintJsFile
     }
 }

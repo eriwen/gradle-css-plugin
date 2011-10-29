@@ -32,34 +32,35 @@ class CssPlugin implements Plugin<Project> {
         this.cssPluginConvention = new CssPluginConvention()
 
         project.convention.plugins.css = cssPluginConvention
+        configureDependencies()
         applyTasks(project)
     }
 
     void applyTasks(final Project project) {
         project.task('minifyCss', type: MinifyCssTask) {
-            input = project.convention.plugins.css.input
-            output = project.convention.plugins.css.output
-            charset = project.convention.plugins.css.charset
             lineBreakPos = project.convention.plugins.css.lineBreakPos
         }
 
-        project.task('combineCss', type: CombineCssTask) {
-            input = project.convention.plugins.css.input
-            output = project.convention.plugins.css.output
-        }
+        project.task('combineCss', type: CombineCssTask) {}
 
-        project.task('gzipCss', type: GzipCssTask) {
-            input = project.convention.plugins.css.input
-            output = project.convention.plugins.css.output
-        }
+        project.task('gzipCss', type: GzipCssTask) {}
 
-        // TODO: project.task('csslint', type: CssLintTask) {}
+        project.task('csslint', type: CssLintTask) {}
 
         project.task('css', type: CssTask) {
-            input = project.convention.plugins.css.input
-            output = project.convention.plugins.css.output
-            charset = project.convention.plugins.css.charset
             lineBreakPos = project.convention.plugins.css.lineBreakPos
+        }
+    }
+
+    void configureDependencies() {
+        project.configurations {
+            rhino
+        }
+        project.repositories {
+            mavenCentral()
+        }
+        project.dependencies {
+            rhino 'org.mozilla:rhino:1.7R3'
         }
     }
 }
