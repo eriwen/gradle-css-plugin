@@ -17,5 +17,5 @@ package com.eriwen.gradle.css
 
 class CssPluginConvention {
 	Integer lineBreakPos = -1
-    String charset = 'UTF-8'
+    Iterable<String> options = []
 }

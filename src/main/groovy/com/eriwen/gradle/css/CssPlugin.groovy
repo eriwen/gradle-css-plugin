@@ -45,7 +45,9 @@ class CssPlugin implements Plugin<Project> {
 
         project.task('gzipCss', type: GzipCssTask) {}
 
-        project.task('csslint', type: CssLintTask) {}
+        project.task('csslint', type: CssLintTask) {
+            options = project.convention.plugins.css.options
+        }
 
         project.task('css', type: CssTask) {
             lineBreakPos = project.convention.plugins.css.lineBreakPos
