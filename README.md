@@ -11,7 +11,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.eriwen:gradle-css-plugin:0.1'
+        classpath 'com.eriwen:gradle-css-plugin:0.2'
     }
 }
 // Invoke the plugin
@@ -19,8 +19,8 @@ apply plugin: 'css'
 
 // Specify a collection of files to be combined, then minified and finally GZip compressed.
 css {
-    input = fileTree(dir: "${projectDir}/css", include: "**/*.css")
-    output = file("${buildDir}/combinedMinifiedAndGzipped.css")
+    input.files fileTree(dir: "${projectDir}/css", include: "**/*.css")
+    output.file file("${buildDir}/combinedMinifiedAndGzipped.css")
 }
 ```
 
@@ -28,8 +28,17 @@ css {
 
 ```groovy
 css {
-    input = fileTree(dir: "${projectDir}/otherdir", includes: ["file1.css", "file2.css"])
-    output = file("${buildDir}/teenytiny.css")
+    input.files fileTree(dir: "${projectDir}/otherdir", includes: ["file1.css", "file2.css"])
+    output.file file("${buildDir}/teenytiny.css")
+}
+```
+
+**Supports [CSS Lint](http://csslint.net)**
+```groovy
+csslint {
+	inputs.files fileTree(dir: "${projectDir}/css", include: "**/*.css")
+	outputs.file file("${buildDir}/csslint.xml")
+	options = ["--rules=adjoining-classes,grouping", '--format=lint-xml']
 }
 ```
 
@@ -38,44 +47,49 @@ css {
 ```groovy
 // Combine CSS files
 combineCss {
-    input = fileTree(dir: "${projectDir}/css", include: "**/*.css")
-    output = file("${buildDir}/all.css")
+    input.files fileTree(dir: "${projectDir}/css", include: "**/*.css")
+    output.file file("${buildDir}/all.css")
 }
 
 // Minify with YUI Compressor
 minifyCss {
-    input = file("${buildDir}/all.css")
-    output = file("${buildDir}/all-min.css")
+    input.file file("${buildDir}/all.css")
+    output.file file("${buildDir}/all-min.css")
     lineBreakPos = 120
 }
 
 // GZip
 gzipCss {
-    input = file("${buildDir}/all-min.css")
-    output = input
+    input.file file("${buildDir}/all-min.css")
+    output.file input
 }
 ```
 
 # Available Tasks and Options #
 ### combineCss ###
- - input = [FileCollection](http://gradle.org/current/docs/javadoc/org/gradle/api/file/FileCollection.html) of files to merge
- - output = File for combined output
+ - input.files [FileCollection](http://gradle.org/current/docs/javadoc/org/gradle/api/file/FileCollection.html) of files to merge
+ - output.file File for combined output
 
 ### minifyCss (Uses the [YUI Compressor](http://developer.yahoo.com/yui/compressor/)) ###
- - input = File to minify
- - output = File for minified output
+ - input.file File to minify
+ - output.file File for output
  - *(Optional)* charset = 'UTF-8' (default) Read the input file using given charset
  - *(Optional)* lineBreakPos = -1 (default) Insert a line break after the specified column number
 
 ### gzipCss ###
- - input = File to compress
- - output = File for compressed output
+ - input.file File to compress
+ - output.file File for compressed output 
 
 ### css ###
- - input = File to minify
- - output = File for minified output
+ - input.files [FileCollection](http://gradle.org/current/docs/javadoc/org/gradle/api/file/FileCollection.html) of files to merge
+ - output.file File for minified output
  - *(Optional)* charset = 'UTF-8' (default) Read the input file using given charset
  - *(Optional)* lineBreakPos = -1 (default) Insert a line break after the specified column number
+
+## csslint ##
+ - input = [FileCollection](http://gradle.org/current/docs/javadoc/org/gradle/api/file/FileCollection.html) of files to assess
+ - output = File for output
+ - *(Optional)* options = command-line options. See [CSS Lint CLI Details](https://github.com/stubbornella/csslint/wiki/Command-line-interface)
 
 What, you want more? [Let me know!](https://github.com/eriwen/gradle-css-plugin/issues)
 
