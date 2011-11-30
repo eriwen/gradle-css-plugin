@@ -34,6 +34,7 @@ css {
 ```
 
 **Supports [CSS Lint](http://csslint.net)**
+
 ```groovy
 csslint {
 	inputs.files fileTree(dir: "${projectDir}/css", include: "**/*.css")
@@ -86,7 +87,7 @@ gzipCss {
  - *(Optional)* charset = 'UTF-8' (default) Read the input file using given charset
  - *(Optional)* lineBreakPos = -1 (default) Insert a line break after the specified column number
 
-## csslint ##
+### csslint ###
  - input = [FileCollection](http://gradle.org/current/docs/javadoc/org/gradle/api/file/FileCollection.html) of files to assess
  - output = File for output
  - *(Optional)* options = command-line options. See [CSS Lint CLI Details](https://github.com/stubbornella/csslint/wiki/Command-line-interface)
