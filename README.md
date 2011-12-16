@@ -19,8 +19,8 @@ apply plugin: 'css'
 
 // Specify a collection of files to be combined, then minified and finally GZip compressed.
 css {
-    input.files fileTree(dir: "${projectDir}/css", include: "**/*.css")
-    output.file file("${buildDir}/combinedMinifiedAndGzipped.css")
+    inputs.files fileTree(dir: "${projectDir}/css", include: "**/*.css")
+    outputs.file file("${buildDir}/combinedMinifiedAndGzipped.css")
 }
 ```
 
@@ -28,8 +28,8 @@ css {
 
 ```groovy
 css {
-    input.files fileTree(dir: "${projectDir}/otherdir", includes: ["file1.css", "file2.css"])
-    output.file file("${buildDir}/teenytiny.css")
+    inputs.files fileTree(dir: "${projectDir}/otherdir", includes: ["file1.css", "file2.css"])
+    outputs.file file("${buildDir}/teenytiny.css")
 }
 ```
 
@@ -48,21 +48,21 @@ csslint {
 ```groovy
 // Combine CSS files
 combineCss {
-    input.files fileTree(dir: "${projectDir}/css", include: "**/*.css")
-    output.file file("${buildDir}/all.css")
+    inputs.files fileTree(dir: "${projectDir}/css", include: "**/*.css")
+    outputs.file file("${buildDir}/all.css")
 }
 
 // Minify with YUI Compressor
 minifyCss {
-    input.file file("${buildDir}/all.css")
-    output.file file("${buildDir}/all-min.css")
+    inputs.file file("${buildDir}/all.css")
+    outputs.file file("${buildDir}/all-min.css")
     lineBreakPos = 120
 }
 
 // GZip
 gzipCss {
-    input.file file("${buildDir}/all-min.css")
-    output.file input
+    inputs.file file("${buildDir}/all-min.css")
+    outputs.file input
 }
 ```
 
