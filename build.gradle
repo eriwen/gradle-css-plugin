@@ -5,26 +5,34 @@ apply plugin: 'idea'
 
 defaultTasks 'clean', 'build'
 
-version = '0.2'
+version = '0.3.0-SNAPSHOT'
 group = 'com.eriwen'
 artifact = 'gradle-css-plugin'
-
-configurations { 
-	deployment
-	published.extendsFrom archives, signatures
-}
+isSnapshot = version.endsWith("-SNAPSHOT")
 
 repositories {
 	mavenCentral()
+    maven { url 'http://m2repo.spockframework.org/snapshots/' }
 }
 
 dependencies {
-	groovy 'org.codehaus.groovy:groovy:1.8.3'
+	groovy localGroovy()
 	compile gradleApi()
-	compile 'com.yahoo.platform.yui:yuicompressor:2.4.6'
-	runtime 'org.codehaus.groovy:groovy:1.8.3'
-	deployment 'org.apache.maven.wagon:wagon-webdav-jackrabbit:1.0-beta-7'
-    testCompile 'junit:junit:4.8.2'
+	compile('com.yahoo.platform.yui:yuicompressor:2.4.6') {
+        exclude module: 'junit'
+    }
+    testCompile('org.spockframework:spock-core:0.6-groovy-1.8-SNAPSHOT') {
+        exclude module: "junit-dep"
+        exclude module: "groovy-all"
+    }
+}
+
+idea.module {
+	gradleCacheVariable = 'GRADLE_CACHE'
+	downloadJavadoc = true
+    downloadSource = true
+	outputDir = file("intellij/out")
+	testOutputDir = file("intellij/testOut")
 }
 
 jar {
@@ -33,20 +41,18 @@ jar {
 
 task sourceJar(type: Jar) {
 	description = 'An archive of the source code for Maven Central'
-	baseName = artifact
 	classifier = 'sources'
 	from sourceSets.main.groovy
 }
 
-task groovydocJar(type: Jar, dependsOn: groovydoc) {
+task groovydocJar(type: Jar) {
 	description = 'An archive of the GroovyDocs for Maven Central'
-	baseName = artifact
 	classifier = 'javadoc'
-	from fileTree(groovydoc.destinationDir)
+	from groovydoc
 }
 
 task wrapper(type: Wrapper) {
-	gradleVersion = '1.0-milestone-5'
+	gradleVersion = '1.0-milestone-8a'
 }
 
 artifacts { 
@@ -57,25 +63,32 @@ signing {
 	sign configurations.archives
 }
 
-install {
-	repositories.mavenInstaller {
-		pom.project(pomConfiguration)
+// Only *require* signing if we are uploading a non snapshot version
+gradle.taskGraph.whenReady { taskGraph ->
+    tasks.withType(org.gradle.plugins.signing.Sign).all {
+        required = taskGraph.hasTask(":uploadArchives") && !isSnapshot
+    }
+}
+
+install.repositories.mavenInstaller {
+	pom.project(pomConfiguration)
+	if (signing.signatory) {
+		beforeDeployment { signPom(it) }
 	}
 }
 
 // NOTE: Must still rename build/pom-default.xml to pom.xml
 // NOTE: Must rename pom-default.xml.asc to gradle-css-plugin-${version}.pom.asc
-uploadPublished {
-	dependsOn << [signArchives]
+uploadArchives {
 	repositories.mavenDeployer {
-		beforeDeployment { deployment ->
-			signPom(deployment)
-		}
+        if (signing.signatory) {
+            beforeDeployment { signPom(it) }
+        }
 		name = 'mavenCentralReleaseDeployer'
-		repository(url: 'https://oss.sonatype.org/service/local/staging/deploy/maven2') {
+		repository(url: 'https://oss.sonatype.org/service/local/staging/deploy/maven2/') {
 			authentication(userName: System.properties['mavenCentralUsername'], password: System.properties['mavenCentralPassword'])
 			releases(updatePolicy: 'always')
-			snapshots()
+			snapshots(updatePolicy: 'always')
 		}
 		pom.project(pomConfiguration)
 	}
@@ -86,9 +99,10 @@ uploadPublished {
  */
 def getPomConfiguration() {
 	return {
-		name('Gradle CSS Plugin')
-		description('A Gradle plugin for working with CSS.')
-		url('https://github.com/eriwen/gradle-css-plugin')
+		name 'Gradle CSS Plugin'
+        packaging 'war'
+		description 'A Gradle plugin for working with CSS.'
+		url 'https://github.com/eriwen/gradle-css-plugin'
 		licenses {
 			license {
 				name 'The Apache Software License, Version 2.0'
@@ -98,15 +112,15 @@ def getPomConfiguration() {
 		}
 		developers {
 			developer {
-				id('eriwen')
-				name('Eric Wendelin')
-				email('emwendelin@gmail.com')
+				id 'eriwen'
+				name 'Eric Wendelin'
+				email 'emwendelin@gmail.com'
 			}
 		}
 		scm {
-			connection('scm:https://eriwen@github.com/eriwen/gradle-css-plugin')
-			developerConnection('scm:git@github.com:eriwen/gradle-css-plugin.git')
-			url('https://github.com/eriwen/gradle-css-plugin')
+			connection 'scm:https://eriwen@github.com/eriwen/gradle-css-plugin'
+			developerConnection 'scm:git@github.com:eriwen/gradle-css-plugin.git'
+			url 'https://github.com/eriwen/gradle-css-plugin'
 		}
 	}
 }
