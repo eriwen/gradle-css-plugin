@@ -1,5 +1,6 @@
-out/
+idealib/
 build/
+out/
 .gradle/
 *.iml
 *.ipr
