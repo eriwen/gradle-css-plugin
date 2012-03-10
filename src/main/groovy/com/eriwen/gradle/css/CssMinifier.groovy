@@ -6,7 +6,6 @@ import com.yahoo.platform.yui.compressor.CssCompressor
  * Utility class that houses minification logic.
  *
  * @author Eric Wendelin
- * @date 10/29/11
  */
 class CssMinifier {
     private static final String CHARSET = 'UTF-8'
@@ -17,8 +16,8 @@ class CssMinifier {
      * @param outputFile File for minified output
      */
     void minifyCssFile(final File inputFile, final File outputFile, final Integer lineBreakPos) {
-        Reader reader = null
-        CssCompressor compressor = null
+        Reader reader
+        CssCompressor compressor
         try {
             reader = new InputStreamReader(new FileInputStream(inputFile), CHARSET)
             compressor = new CssCompressor(reader)
@@ -30,7 +29,7 @@ class CssMinifier {
             }
         }
 
-        Writer writer = null
+        Writer writer
         try {
             writer = new OutputStreamWriter(new FileOutputStream(outputFile), CHARSET)
             compressor.compress(writer, lineBreakPos)

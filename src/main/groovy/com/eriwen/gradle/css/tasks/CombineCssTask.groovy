@@ -17,14 +17,13 @@ package com.eriwen.gradle.css.tasks
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
-import org.gradle.api.file.FileCollection
 
 class CombineCssTask extends DefaultTask {
     @TaskAction
     def run() {
         def outputFiles = getOutputs().files
         if (outputFiles.files.size() == 1) {
-            ant.concat(destfile: outputFiles.asPath) {
+            ant.concat(destfile: outputFiles.asPath, fixlastline: 'yes') {
                 getInputs().files.each {
                     fileset(file: it.canonicalPath)
                 }

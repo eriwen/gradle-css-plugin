@@ -38,8 +38,8 @@ class CssTask extends DefaultTask {
         }
 
         ant.concat(destfile: tempPath) {
-            getInputs().files.files.each {
-                fileset(dir: it, includes: '*.css')
+            getInputs().files.each {
+                fileset(file: it.canonicalPath)
             }
         }
 
