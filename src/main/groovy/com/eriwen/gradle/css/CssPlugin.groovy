@@ -20,6 +20,7 @@ import org.gradle.api.Project
 import org.gradle.api.Plugin
 
 import com.eriwen.gradle.css.tasks.*
+import com.eriwen.gradle.css.source.internal.InternalGradle
 
 class CssPlugin implements Plugin<Project> {
     private Project project
@@ -32,6 +33,7 @@ class CssPlugin implements Plugin<Project> {
         this.cssPluginConvention = new CssPluginConvention()
 
         project.convention.plugins.css = cssPluginConvention
+        project.extensions.add(CssExtension.NAME, InternalGradle.toInstantiator(project).newInstance(CssExtension, project))
         configureDependencies()
         applyTasks(project)
     }
