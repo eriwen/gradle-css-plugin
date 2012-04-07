@@ -17,19 +17,38 @@ package com.eriwen.gradle.css.tasks
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
+import org.gradle.api.GradleException
 
 class CombineCssTask extends DefaultTask {
+    def source
+    File dest
+
     @TaskAction
     def run() {
-        def outputFiles = getOutputs().files
-        if (outputFiles.files.size() == 1) {
-            ant.concat(destfile: outputFiles.asPath, fixlastline: 'yes') {
-                getInputs().files.each {
-                    fileset(file: it.canonicalPath)
-                }
+        if (!getInputs().files.files.empty) {
+            logger.warn('The syntax "inputs.files ..." is deprecated! Please use `source = ["path1", "path2"]`')
+            logger.warn('This will be removed in the next version of the CSS plugin')
+            source = getInputs().files.files.collect { it.canonicalPath }
+        }
+
+        if (!getOutputs().files.files.empty) {
+            logger.warn 'The syntax "outputs.files ..." is deprecated! Please use `dest = "dest/filename.js"`'
+            def outputFiles = getOutputs().files.files
+            if (outputFiles.size() == 1) {
+                dest = (outputFiles.toArray()[0] as File)
+            } else if (!dest) {
+                throw new GradleException('Output must be exactly 1 File object. Example: dest = "myFile"')
             }
-        } else {
-            throw new IllegalArgumentException('Output must be exactly 1 File object. Example: outputs.file = file("myFile")')
+        }
+
+        ant.concat(destfile: dest.canonicalPath, fixlastline: 'yes') {
+            source.each { String path ->
+                if (!(new File(path).exists())) {
+                    throw new GradleException("Source CSS file ${path} does not exist!")
+                }
+                logger.info("Adding to fileset: ${path}")
+                fileset(file: path)
+            }
         }
     }
 }

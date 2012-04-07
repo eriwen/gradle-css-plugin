@@ -5,14 +5,13 @@ apply plugin: 'idea'
 
 defaultTasks 'clean', 'build'
 
-version = '0.3.0-SNAPSHOT'
+version = '0.3.2-SNAPSHOT'
 group = 'com.eriwen'
 artifact = 'gradle-css-plugin'
 isSnapshot = version.endsWith("-SNAPSHOT")
 
 repositories {
 	mavenCentral()
-    maven { url 'http://m2repo.spockframework.org/snapshots/' }
 }
 
 dependencies {
@@ -21,7 +20,8 @@ dependencies {
 	compile('com.yahoo.platform.yui:yuicompressor:2.4.6') {
         exclude module: 'junit'
     }
-    testCompile('org.spockframework:spock-core:0.6-groovy-1.8-SNAPSHOT') {
+//    compile('org.jruby:jruby:1.6.7')
+    testCompile ('org.spockframework:spock-core:0.6-groovy-1.8') {
         exclude module: "junit-dep"
         exclude module: "groovy-all"
     }
@@ -52,7 +52,7 @@ task groovydocJar(type: Jar) {
 }
 
 task wrapper(type: Wrapper) {
-	gradleVersion = '1.0-milestone-8a'
+	gradleVersion = '1.0-milestone-9'
 }
 
 artifacts { 
@@ -77,8 +77,6 @@ install.repositories.mavenInstaller {
 	}
 }
 
-// NOTE: Must still rename build/pom-default.xml to pom.xml
-// NOTE: Must rename pom-default.xml.asc to gradle-css-plugin-${version}.pom.asc
 uploadArchives {
 	repositories.mavenDeployer {
         if (signing.signatory) {
