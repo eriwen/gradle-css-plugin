@@ -1,0 +1,136 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Gradle CSS Plugin by eriwen</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/respond.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="stylesheets/ie.css">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+
+      <div id="header">
+        <nav>
+          <li class="fork"><a href="https://github.com/eriwen/gradle-css-plugin">Fork On GitHub</a></li>
+          <li class="downloads"><a href="https://github.com/eriwen/gradle-css-plugin/zipball/master">ZIP</a></li>
+          <li class="downloads"><a href="https://github.com/eriwen/gradle-css-plugin/tarball/master">TAR</a></li>
+          <li class="title">DOWNLOADS</li>
+        </nav>
+      </div><!-- end header -->
+
+    <div class="wrapper">
+
+      <section>
+        <div id="title">
+          <h1>Gradle CSS Plugin</h1>
+          <p>Gradle plugin for working with CSS</p>
+          <hr>
+          <span class="credits left">Project maintained by <a href="https://github.com/eriwen">eriwen</a></span>
+          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="http://twitter.com/#!/michigangraham">mattgraham</a></span>
+        </div>
+
+        <h1>Quick Start</h1>
+
+<p>Managing your CSS in a <a href="http://gradle.org">Gradle</a> build is super easy now! Just add this to your <em>build.gradle</em> file:</p>
+
+<div class="highlight">
+<pre><span class="c1">// Grab the plugin from a Maven Repo automatically</span>
+<span class="n">buildscript</span> <span class="o">{</span>
+    <span class="n">repositories</span> <span class="o">{</span>
+        <span class="n">mavenCentral</span><span class="o">()</span>
+    <span class="o">}</span>
+    <span class="n">dependencies</span> <span class="o">{</span>
+        <span class="n">classpath</span> <span class="s1">'com.eriwen:gradle-css-plugin:0.3'</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+<span class="c1">// Invoke the plugin</span>
+<span class="n">apply</span> <span class="nl">plugin:</span> <span class="s1">'css'</span>
+
+<span class="c1">// Specify a collection of files to be combined, then minified and finally GZip compressed.</span>
+<span class="n">task</span> <span class="nf">combinecss</span><span class="o">(</span><span class="nl">type:</span> <span class="n">com</span><span class="o">.</span><span class="na">eriwen</span><span class="o">.</span><span class="na">gradle</span><span class="o">.</span><span class="na">css</span><span class="o">.</span><span class="na">tasks</span><span class="o">.</span><span class="na">CombineCssTask</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">source</span> <span class="o">=</span> <span class="o">[</span><span class="s2">"${projectDir}/css/file1.css"</span><span class="o">,</span> <span class="s2">"${projectDir}/css/file2.css"</span><span class="o">]</span>
+    <span class="n">dest</span> <span class="o">=</span> <span class="n">file</span><span class="o">(</span><span class="s2">"${buildDir}/all.css"</span><span class="o">)</span>
+<span class="o">}</span>
+
+<span class="n">task</span> <span class="nf">minifycss</span><span class="o">(</span><span class="nl">type:</span> <span class="n">com</span><span class="o">.</span><span class="na">eriwen</span><span class="o">.</span><span class="na">gradle</span><span class="o">.</span><span class="na">css</span><span class="o">.</span><span class="na">tasks</span><span class="o">.</span><span class="na">MinifyCssTask</span><span class="o">,</span> <span class="nl">dependsOn:</span> <span class="s1">'combinecss'</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">source</span> <span class="o">=</span> <span class="n">file</span><span class="o">(</span><span class="s2">"${buildDir}/all.css"</span><span class="o">)</span>
+    <span class="n">dest</span> <span class="o">=</span> <span class="n">file</span><span class="o">(</span><span class="s2">"${buildDir}/all-min.css"</span><span class="o">)</span>
+    <span class="n">warningLevel</span> <span class="o">=</span> <span class="s1">'QUIET'</span>
+<span class="o">}</span>
+
+<span class="n">task</span> <span class="nf">gzipcss</span><span class="o">(</span><span class="nl">type:</span> <span class="n">com</span><span class="o">.</span><span class="na">eriwen</span><span class="o">.</span><span class="na">gradle</span><span class="o">.</span><span class="na">css</span><span class="o">.</span><span class="na">tasks</span><span class="o">.</span><span class="na">GzipCssTask</span><span class="o">,</span> <span class="nl">dependsOn:</span> <span class="s1">'minifycss'</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">source</span> <span class="o">=</span> <span class="n">file</span><span class="o">(</span><span class="s2">"${buildDir}/all-min.css"</span><span class="o">)</span>
+    <span class="n">dest</span> <span class="o">=</span> <span class="n">file</span><span class="o">(</span><span class="s2">"${buildDir}/all-min.css"</span><span class="o">)</span>
+<span class="o">}</span>
+</pre>
+</div>
+
+
+<p><strong>Supports <a href="http://csslint.net">CSS Lint</a></strong>
+<code>groovy
+csslint {
+    source = fileTree(dir: "${projectDir}/css", include: "**/*.css").collect { it.canonicalPath }
+    dest = file("${buildDir}/csslint.xml")
+    options = ["--rules=adjoining-classes,grouping", '--format=lint-xml']
+}
+</code></p>
+
+<h1>Available Tasks and Options</h1>
+
+<h3>combineCss</h3>
+
+<ul>
+<li>source = Collection of file paths of files to merge</li>
+<li>dest = File for combined output</li>
+</ul><h3>minifyCss (Uses the <a href="http://developer.yahoo.com/yui/compressor/">YUI Compressor</a>)</h3>
+
+<ul>
+<li>source = File to minify</li>
+<li>dest = File for minified output</li>
+<li>
+<em>(Optional)</em> charset = 'UTF-8' (default) Read the input file using given charset</li>
+<li>
+<em>(Optional)</em> lineBreakPos = -1 (default) Insert a line break after the specified column number</li>
+</ul><h3>gzipCss</h3>
+
+<ul>
+<li>source = File to compress</li>
+<li>dest = File for compressed output</li>
+</ul><h3>css (DEPRECATED, will be removed in v0.4)</h3>
+
+<ul>
+<li>input.files <a href="http://gradle.org/current/docs/javadoc/org/gradle/api/file/FileCollection.html">FileCollection</a> of files to merge</li>
+<li>output.file File for minified output</li>
+<li>
+<em>(Optional)</em> charset = 'UTF-8' (default) Read the input file using given charset</li>
+<li>
+<em>(Optional)</em> lineBreakPos = -1 (default) Insert a line break after the specified column number</li>
+</ul><h3>csslint</h3>
+
+<ul>
+<li>source = Collection of file paths of files to merge</li>
+<li>dest = File for output</li>
+<li>
+<em>(Optional)</em> options = command-line options. See <a href="https://github.com/stubbornella/csslint/wiki/Command-line-interface">CSS Lint CLI Details</a>
+</li>
+</ul><p>What, you want more? <a href="https://github.com/eriwen/gradle-css-plugin/issues">Let me know!</a></p>
+
+<h1>See Also</h1>
+
+<p>The <a href="https://github.com/eriwen/gradle-js-plugin">Gradle JS Plugin</a>!</p>
+      </section>
+
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><!--<![endif]-->
+  </body>
+</html>
