@@ -1,3 +1,5 @@
+[![Build Status](https://buildhive.cloudbees.com/job/eriwen/job/gradle-css-plugin/badge/icon)](https://buildhive.cloudbees.com/job/eriwen/job/gradle-css-plugin/)
+
 # Quick Start #
 Managing your CSS in a [Gradle](http://gradle.org) build is super easy now! Just add this to your *build.gradle* file:
 
