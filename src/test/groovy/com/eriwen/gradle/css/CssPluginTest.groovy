@@ -37,14 +37,4 @@ class CssPluginTest {
         assertEquals 1, project.getTasksByName('csslint', false).size()
         assertEquals 0, project.getTasksByName('bogus', false).size()
     }
-
-    @Test(expected=TaskExecutionException.class)
-    void shouldFailOnDownstreamTaskFailure() {
-        plugin.apply(project)
-
-        // NOTE: combineCss task will fail without input files
-        project.getTasksByName('combineCss', false).iterator().next().execute()
-
-        fail 'Should have gotten a TaskExecutionException'
-    }
 }
