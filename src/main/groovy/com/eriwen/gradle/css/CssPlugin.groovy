@@ -35,6 +35,7 @@ class CssPlugin implements Plugin<Project> {
         project.task('combineCss', type: CombineCssTask) {}
         project.task('gzipCss', type: GzipCssTask) {}
         project.task('csslint', type: CssLintTask) {}
+        project.task('kss', type: KssTask) {}
     }
 
     void configureDependencies(final Project project) {
