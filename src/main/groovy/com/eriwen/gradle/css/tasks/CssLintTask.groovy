@@ -16,38 +16,32 @@
 package com.eriwen.gradle.css.tasks
 
 import org.gradle.api.tasks.TaskAction
-import org.gradle.api.DefaultTask
-import com.eriwen.gradle.css.RhinoExec
 import com.eriwen.gradle.css.ResourceUtil
+import com.eriwen.gradle.css.RhinoExec
+import org.gradle.api.tasks.SourceTask
+import org.gradle.api.tasks.OutputFile
 
-class CssLintTask extends DefaultTask {
+class CssLintTask extends SourceTask {
     private static final String CSSLINT_PATH = 'csslint-rhino.js'
-    private static final String TMP_DIR = 'tmp/css'
-    def options = []
+    private static final String TMP_DIR = "tmp${File.separator}css"
     private static final ResourceUtil RESOURCE_UTIL = new ResourceUtil()
     private final RhinoExec rhino = new RhinoExec(project)
 
-    def source
-    File dest
+    @OutputFile def dest
+
+    File getDest() {
+        project.file(dest)
+    }
 
     @TaskAction
     def run() {
-        if (!source) {
-            logger.warn('The syntax "inputs.files ..." is deprecated! Please use `source = "path1"`')
-            logger.warn('This will be removed in the next version of the CSS plugin')
-            source = getInputs().files.files.collect { it.canonicalPath }
-        }
-
-        if (!dest) {
-            logger.warn 'The syntax "outputs.file file(..)" is deprecated! Please use `dest = file(buildDir)`'
-            dest = getOutputs().files.files.toArray()[0] as File
-        }
-        
         final File csslintJsFile = RESOURCE_UTIL.extractFileToDirectory(
                 new File(project.buildDir, TMP_DIR), CSSLINT_PATH)
         final List<String> args = [csslintJsFile.canonicalPath]
-        args.addAll(source)
-        args.addAll(options)
-        rhino.execute(args, dest)
+        args.addAll(source.files.collect { it.canonicalPath })
+        args.add("--format=${project.options.format}")
+        args.add("--errors=${project.options.errors.join(',')}")
+        args.add("--warnings=${project.options.warnings.join(',')}")
+        rhino.execute(args, [out: new FileOutputStream(dest as File)])
     }
 }

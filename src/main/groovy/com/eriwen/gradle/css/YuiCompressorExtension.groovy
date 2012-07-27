@@ -13,21 +13,11 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package com.eriwen.gradle.css.tasks
+package com.eriwen.gradle.css
 
-import org.gradle.api.tasks.TaskAction
-import com.eriwen.gradle.css.ResourceUtil
-import com.eriwen.gradle.css.RhinoExec
-import org.gradle.api.tasks.SourceTask
-import org.gradle.api.tasks.OutputFile
+import org.gradle.api.tasks.Input
 
-class KssTask extends SourceTask {
-    @OutputFile File dest
-
-    @TaskAction
-    def run() {
-      // https://github.com/RobertFischer/gradle-plugins/blob/master/src/main/groovy/RunJRubyPlugin.groovy
-      // http://tommy.chheng.com/2010/06/20/call-a-jruby-method-from-java/
-      // http://musingsofaprogrammingaddict.blogspot.com/2009/02/using-jruby-with-maven.html
-    }
+class YuiCompressorExtension {
+    public static final NAME = "yuicompressor"
+    @Input Integer lineBreakPos = -1
 }

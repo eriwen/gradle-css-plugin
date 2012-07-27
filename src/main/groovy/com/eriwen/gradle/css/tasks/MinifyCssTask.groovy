@@ -15,35 +15,22 @@
  */
 package com.eriwen.gradle.css.tasks
 
-import org.gradle.api.DefaultTask
-import org.gradle.api.tasks.TaskAction
 import com.eriwen.gradle.css.CssMinifier
-import org.gradle.api.GradleException
+import org.gradle.api.tasks.OutputFile
+import org.gradle.api.tasks.SourceTask
+import org.gradle.api.tasks.TaskAction
 
-class MinifyCssTask extends DefaultTask {
+class MinifyCssTask extends SourceTask {
     private static final CssMinifier MINIFIER = new CssMinifier()
-    
-    Integer lineBreakPos = -1
-    def source
-    File dest
 
-  	@TaskAction
-	def run() {
-        if (!source) {
-            logger.warn 'The syntax "inputs.files ..." is deprecated! Please use `source = file("path1")`'
-            logger.warn 'This will be removed in the next version of the CSS plugin'
-            source = getInputs().files.files.toArray()[0] as File
-        }
+    @OutputFile def dest
 
-        if (!source.exists()) {
-            throw new GradleException("CSS file ${source.canonicalPath} doesn't exist!")
-        }
+    File getDest() {
+        project.file(dest)
+    }
 
-        if (!dest) {
-            logger.warn 'The syntax "outputs.files ..." is deprecated! Please use `dest = file("dest/file.js")`'
-            dest = getOutputs().files.files.toArray()[0] as File
-        }
-
-        MINIFIER.minifyCssFile(source, dest, lineBreakPos)
+    @TaskAction
+    def run() {
+        MINIFIER.minifyCssFile(source.singleFile, dest as File, project.yuicompressor.lineBreakPos)
     }
 }

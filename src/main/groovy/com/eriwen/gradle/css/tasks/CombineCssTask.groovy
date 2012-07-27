@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 Eric Wendelin
+ * Copyright 2012 Eric Wendelin
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -20,12 +20,15 @@ import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.SourceTask
 
 class CombineCssTask extends SourceTask {
-    @OutputFile
-    File dest
+    @OutputFile def dest
+
+    File getDest() {
+        project.file(dest)
+    }
 
     @TaskAction
     def run() {
-        ant.concat(destfile: dest.canonicalPath, fixlastline: 'yes') {
+        ant.concat(destfile: (dest as File).canonicalPath, fixlastline: 'yes') {
             source.files.each {
                 logger.info("Adding to fileset: ${it}")
                 fileset(file: it)

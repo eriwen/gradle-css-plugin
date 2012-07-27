@@ -15,48 +15,29 @@
  */
 package com.eriwen.gradle.css
 
-import org.gradle.api.logging.Logger
 import org.gradle.api.Project
 import org.gradle.api.Plugin
-
 import com.eriwen.gradle.css.tasks.*
-import com.eriwen.gradle.css.source.internal.InternalGradle
 
 class CssPlugin implements Plugin<Project> {
-    private Project project
-    private Logger logger
-    private CssPluginConvention cssPluginConvention
 
     void apply(final Project project) {
-        this.project = project
-        this.logger = logger
-        this.cssPluginConvention = new CssPluginConvention()
+        project.extensions.create(CssExtension.NAME, CssExtension, project)
+        project.extensions.create(CssLintExtension.NAME, CssLintExtension)
+        project.extensions.create(YuiCompressorExtension.NAME, YuiCompressorExtension)
 
-        project.convention.plugins.css = cssPluginConvention
-        project.extensions.add(CssExtension.NAME, InternalGradle.toInstantiator(project).newInstance(CssExtension, project))
-        configureDependencies()
+        configureDependencies(project)
         applyTasks(project)
     }
 
     void applyTasks(final Project project) {
-        project.task('minifyCss', type: MinifyCssTask) {
-            lineBreakPos = project.convention.plugins.css.lineBreakPos
-        }
-
+        project.task('minifyCss', type: MinifyCssTask) {}
         project.task('combineCss', type: CombineCssTask) {}
-
         project.task('gzipCss', type: GzipCssTask) {}
-
-        project.task('csslint', type: CssLintTask) {
-            options = project.convention.plugins.css.options
-        }
-
-        project.task('css', type: CssTask) {
-            lineBreakPos = project.convention.plugins.css.lineBreakPos
-        }
+        project.task('csslint', type: CssLintTask) {}
     }
 
-    void configureDependencies() {
+    void configureDependencies(final Project project) {
         project.configurations {
             rhino
         }

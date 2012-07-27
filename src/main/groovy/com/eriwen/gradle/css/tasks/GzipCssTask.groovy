@@ -15,32 +15,21 @@
  */
 package com.eriwen.gradle.css.tasks
 
-import org.gradle.api.DefaultTask
+import org.gradle.api.tasks.OutputFile
+import org.gradle.api.tasks.SourceTask
 import org.gradle.api.tasks.TaskAction
-import org.gradle.api.GradleException
 
-class GzipCssTask extends DefaultTask {
-    def source
-    File dest
+class GzipCssTask extends SourceTask {
+    @OutputFile def dest
+
+    File getDest() {
+        project.file(dest)
+    }
 
     @TaskAction
     def run() {
-        if (!source) {
-            logger.warn('The syntax "inputs.files ..." is deprecated! Please use `source = file("path1")`')
-            logger.warn('This will be removed in the next version of the CSS plugin')
-            source = getInputs().files.files.toArray()[0] as File
-        }
-
-        if (!dest) {
-            logger.warn('The syntax "outputs.files ..." is deprecated! Please use `dest = file("dest/file.js")`')
-            dest = getOutputs().files.files.toArray()[0] as File
-        }
-
-        if (!source.exists()) {
-            throw new GradleException("CSS file ${source.canonicalPath} doesn't exist!")
-        } else {
-            ant.gzip(src: source.canonicalPath, destfile: "${source.canonicalPath}.gz")
-            ant.move(file: "${source.canonicalPath}.gz", tofile: dest.canonicalPath)
-        }
+        final String srcPath = source.singleFile.canonicalPath
+        ant.gzip(src: srcPath, destfile: "${srcPath}.gz")
+        ant.move(file: "${srcPath}.gz", tofile: (dest as File).canonicalPath)
     }
 }
