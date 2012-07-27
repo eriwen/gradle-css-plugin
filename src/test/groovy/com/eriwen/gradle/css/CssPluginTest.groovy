@@ -10,31 +10,15 @@ import static org.junit.Assert.*
 import org.gradle.api.tasks.TaskExecutionException
 
 class CssPluginTest {
-    private static final String TEST_SOURCE_PATH = new File('.', 'src/test/resources').absolutePath
+    Project project = ProjectBuilder.builder().build()
 
-	private Project project
-    private CssPlugin plugin
-
-    @Before
-    void setUp() {
-        project = ProjectBuilder.builder().build()
-        plugin = new CssPlugin()
+    def setup() {
+        project.apply(plugin: JsPlugin)
     }
 
-    @After
-    void tearDown() {
-        project = null
-        plugin = null
-    }
-
-    @Test
-    void shouldApplyCssTasks() {
-        plugin.apply(project)
-
-        assertEquals 1, project.getTasksByName('combineCss', false).size()
-        assertEquals 1, project.getTasksByName('minifyCss', false).size()
-        assertEquals 1, project.getTasksByName('gzipCss', false).size()
-        assertEquals 1, project.getTasksByName('csslint', false).size()
-        assertEquals 0, project.getTasksByName('bogus', false).size()
+    def "extensions are installed"() {
+        expect:
+        project.extensions.getByName("csslint") instanceof CssExtension
+        project.extensions.getByName("yuicompressor") instanceof CssExtension
     }
 }

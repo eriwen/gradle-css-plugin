@@ -1,11 +1,14 @@
 buildscript {
-	repositories {
+    repositories {
+        mavenLocal()
         mavenCentral()
-		mavenLocal()
-	}
-	dependencies {
-		classpath 'com.eriwen:gradle-css-plugin:0.3.2-SNAPSHOT'
-	}
+    }
+    dependencies {
+        classpath 'com.eriwen:gradle-css-plugin:1.0'
+    }
+}
+buildscript {
+    configurations.classpath.resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
 }
 
 repositories {
@@ -13,62 +16,48 @@ repositories {
     mavenCentral()
 }
 
-configurations {
-    rhino
-}
-
-dependencies {
-    rhino 'org.mozilla:rhino:1.7R3'
-}
-
 apply plugin: 'css'
 
-// Combine CSS files
-combineCss {
-    file2 = fileTree(dir: "${projectDir}/src/test/resources", includes: ['file2.css'])
-    file1 = fileTree(dir: "${projectDir}/src/test/resources", includes: ['file1.css'])
-    inputs.files file1 + file2
-    outputs.file file("${buildDir}/all.css")
+css.source {
+    custom {
+        css {
+            srcDir "src/test/resources"
+            include "file*.css"
+        }
+    }
 }
 
+task clean(type: Delete) {
+    delete buildDir
+}
+
+// Combine JS files
 task combine(type: com.eriwen.gradle.css.tasks.CombineCssTask) {
-    //javascript.source.custom.css.files.toList()
-    source = ["${projectDir}/src/test/resources/file1.css", "${projectDir}/src/test/resources/file2.css"]
-    dest = file("${buildDir}/all.css")
+    source = css.source.custom.css.files
+    dest = "${buildDir}/all.css"
 }
 
 // Minify with Google Closure Compiler
-minifyCss {
-    inputs.file file("${buildDir}/all.css")
-    outputs.file file("${buildDir}/all-min.css")
-    warningLevel = 'QUIET'
-}
-
 task minify(type: com.eriwen.gradle.css.tasks.MinifyCssTask) {
-    source = file("${buildDir}/all.css")
+    source = combine
     dest = file("${buildDir}/all-min.css")
+    yuicompressor {
+        lineBreakPos = 100
+    }
 }
 
 // GZip it!
-gzipCss {
-    inputs.file file("${buildDir}/all-min.css")
-    outputs.file file("${buildDir}/all-min.css")
-}
-
 task gzip(type: com.eriwen.gradle.css.tasks.GzipCssTask) {
-    source = file("${buildDir}/all-min.css")
-    dest = file("${buildDir}/all-min.css")
+    source = minify
+    dest = "${buildDir}/all-zipped.min.css"
 }
 
 csslint {
-    file2 = fileTree(dir: "${projectDir}/src/test/resources", includes: ['file2.css'])
-    file1 = fileTree(dir: "${projectDir}/src/test/resources", includes: ['file1.css'])
-    inputs.files file1 + file2
-    outputs.file file("${buildDir}/csslint.out")
-}
-
-task lint(type: com.eriwen.gradle.css.tasks.CssLintTask) {
-    source = ["${projectDir}/src/test/resources/file1.css", "${projectDir}/src/test/resources/file2.css"]
-    dest = file("${buildDir}/csslint.txt")
-    options = ['--format=compact']
+    source = css.source.custom.css.files
+    dest = "${buildDir}/csslint.out"
+    options {
+        format = 'text'
+        warnings = ['box-model', 'ids']
+        errors = []
+    }
 }
