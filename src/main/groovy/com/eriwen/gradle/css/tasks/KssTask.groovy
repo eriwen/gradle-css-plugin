@@ -16,8 +16,6 @@
 package com.eriwen.gradle.css.tasks
 
 import org.gradle.api.tasks.TaskAction
-import com.eriwen.gradle.css.ResourceUtil
-import com.eriwen.gradle.css.RhinoExec
 import org.gradle.api.tasks.SourceTask
 import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.OutputFile
@@ -44,25 +42,26 @@ class KssTask extends SourceTask {
 
         jRubyEngine.put("engine", engineName)
 
+        // Install kss gem locally
         def gemsDir = project.buildDir
         if (!new File("${gemsDir}/gems").exists()) {
             runJRuby("gem install -i ${gemsDir} --no-rdoc --no-ri kss")
         }
+        // TODO: change to ${sourceDir.canonicalPath}
+        // TODO: this task is blocked until https://github.com/kneath/kss/issues/3 is fixed
+        // https://github.com/RobertFischer/gradle-plugins/blob/master/src/main/groovy/RunJRubyPlugin.groovy
+        // http://tommy.chheng.com/2010/06/20/call-a-jruby-method-from-java/
 
         jRubyEngine.eval("""
 require 'rubygems'
-require 'kss'
-styleguide = Kss::Parser.new("${sourceDir.canonicalPath}")
-puts styleguide.to_s
-#puts styleguide.section('0.1.2').description
+require './build/gems/kss-0.3.0/lib/kss.rb'
+styleguide = Kss::Parser.new("src/test/resources")
+puts styleguide.section('1.2.3').description
         """)
-        // https://github.com/RobertFischer/gradle-plugins/blob/master/src/main/groovy/RunJRubyPlugin.groovy
-        // http://tommy.chheng.com/2010/06/20/call-a-jruby-method-from-java/
     }
 
     def runJRuby(cmdArg) {
         Thread.currentThread().setContextClassLoader(JRuby.class.classLoader)
-        println "Running JRuby: $cmdArg"
-        JRuby.main("-S $cmdArg".split())
+        JRuby.main("-S ${cmdArg}".split())
     }
 }
