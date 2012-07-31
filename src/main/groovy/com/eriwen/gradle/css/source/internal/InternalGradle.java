@@ -1,8 +1,8 @@
 package com.eriwen.gradle.css.source.internal;
 
 import org.gradle.api.Project;
-import org.gradle.api.internal.Instantiator;
 import org.gradle.api.internal.file.FileResolver;
+import org.gradle.internal.reflect.Instantiator;
 import org.gradle.api.internal.project.ProjectInternal;
 
 /**
@@ -10,15 +10,15 @@ import org.gradle.api.internal.project.ProjectInternal;
  */
 public abstract class InternalGradle {
 
-    public static Instantiator toInstantiator(Project project) {
-        return toProjectInternal(project).getServices().get(Instantiator.class);
-    }
+   public static Instantiator toInstantiator(Project project) {
+      return toProjectInternal(project).getServices().get(Instantiator.class);
+   }
 
-    public static ProjectInternal toProjectInternal(Project project) {
-        return ((ProjectInternal)project);
-    }
+   public static ProjectInternal toProjectInternal(Project project) {
+      return ((ProjectInternal)project);
+   }
 
-    public static FileResolver toFileResolver(Project project) {
-        return toProjectInternal(project).getFileResolver();
-    }
+   public static FileResolver toFileResolver(Project project) {
+      return toProjectInternal(project).getFileResolver();
+   }
 }

@@ -10,7 +10,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.eriwen:gradle-css-plugin:1.0'
+        classpath 'com.eriwen:gradle-css-plugin:1.1'
     }
 }
 
