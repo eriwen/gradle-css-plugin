@@ -1,4 +1,5 @@
 # Quick Start [![Build Status](https://secure.travis-ci.org/eriwen/gradle-css-plugin.png)](http://travis-ci.org/eriwen/gradle-css-plugin)
+
 Managing your CSS in a [Gradle](http://gradle.org) build is super easy now! Just add this to your *build.gradle* file:
 
 ```groovy
@@ -81,6 +82,17 @@ csslint {
 - *(Optional)* options.errors = (default is none) Collection of string ids for checks. CAUTION: These cause a non-zero exit code and _fail the build!_
 
 What, you want more? [Let me know!](https://github.com/eriwen/gradle-css-plugin/issues)
+
+## Contributors
+When submitting your pull requests, please do the following to make it easier to incorporate your changes:
+
+* Include unit and/or functional tests that validate changes you're making. 
+* Rebase your changes onto origin/HEAD if you can do so cleanly.
+* If submitting additional functionality, provide an example of how to use it.
+* Please keep code style consistent with surrounding code.
+ 
+### Testing
+You can run all tests by simply running `gradlew test` from your favorite shell.
 
 # See Also #
 The [Gradle JS Plugin](https://github.com/eriwen/gradle-js-plugin)!
