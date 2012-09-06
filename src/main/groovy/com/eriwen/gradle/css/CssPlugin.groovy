@@ -31,11 +31,12 @@ class CssPlugin implements Plugin<Project> {
     }
 
     void applyTasks(final Project project) {
+        // TODO: Add descriptions etc.
         project.task('minifyCss', type: MinifyCssTask) {}
         project.task('combineCss', type: CombineCssTask) {}
         project.task('gzipCss', type: GzipCssTask) {}
         project.task('csslint', type: CssLintTask) {}
-        project.task('kss', type: KssTask) {}
+        // project.task('kss', type: KssTask) {}
     }
 
     void configureDependencies(final Project project) {

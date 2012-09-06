@@ -1,6 +1,4 @@
-[![Build Status](https://buildhive.cloudbees.com/job/eriwen/job/gradle-css-plugin/badge/icon)](https://buildhive.cloudbees.com/job/eriwen/job/gradle-css-plugin/)
-
-# Quick Start #
+# Quick Start [![Build Status](https://secure.travis-ci.org/eriwen/gradle-css-plugin.png)](http://travis-ci.org/eriwen/gradle-css-plugin)
 Managing your CSS in a [Gradle](http://gradle.org) build is super easy now! Just add this to your *build.gradle* file:
 
 ```groovy

@@ -5,7 +5,7 @@ apply plugin: 'idea'
 
 defaultTasks 'clean', 'build'
 
-version = '1.1'
+version = '1.2'
 group = 'com.eriwen'
 ext.artifact = 'gradle-css-plugin'
 ext.isSnapshot = version.endsWith("-SNAPSHOT")
@@ -109,7 +109,7 @@ uploadArchives {
 def getPomConfiguration() {
     return {
         name 'Gradle CSS Plugin'
-        packaging 'war'
+        packaging 'jar'
         description 'A Gradle plugin for working with CSS.'
         url 'https://github.com/eriwen/gradle-css-plugin'
         licenses {
