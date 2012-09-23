@@ -5,7 +5,7 @@ apply plugin: 'idea'
 
 defaultTasks 'clean', 'build'
 
-version = '1.2'
+version = '1.1.1'
 group = 'com.eriwen'
 ext.artifact = 'gradle-css-plugin'
 ext.isSnapshot = version.endsWith("-SNAPSHOT")
@@ -21,6 +21,7 @@ dependencies {
         exclude module: 'junit'
     }
     compile 'org.jruby:jruby-complete:1.6.7.2'
+    //runtime 'me.n4u.sass:sass-gems:3.1.16'
     testCompile ('org.spockframework:spock-core:0.6-groovy-1.8') {
         exclude module: "junit-dep"
         exclude module: "groovy-all"

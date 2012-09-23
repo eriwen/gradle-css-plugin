@@ -31,11 +31,11 @@ class CssPlugin implements Plugin<Project> {
     }
 
     void applyTasks(final Project project) {
-        // TODO: Add descriptions etc.
-        project.task('minifyCss', type: MinifyCssTask) {}
-        project.task('combineCss', type: CombineCssTask) {}
-        project.task('gzipCss', type: GzipCssTask) {}
-        project.task('csslint', type: CssLintTask) {}
+        project.task('minifyCss', type: MinifyCssTask, group: 'Build', description: 'Combine many CSS files into one') {}
+        project.task('combineCss', type: CombineCssTask, group: 'Build', description: 'Minify CSS using YUI Minifier') {}
+        project.task('gzipCss', type: GzipCssTask, group: 'Build', description: 'GZip a given CSS file') {}
+        project.task('csslint', type: CssLintTask, group: 'Verification', description: 'Analyze CSS sources with CSS Lint') {}
+        // project.task('sass', type: CompileSassTask) {}
         // project.task('kss', type: KssTask) {}
     }
 
@@ -47,7 +47,7 @@ class CssPlugin implements Plugin<Project> {
             mavenCentral()
         }
         project.dependencies {
-            rhino 'org.mozilla:rhino:1.7R3'
+            rhino 'org.mozilla:rhino:1.7R4'
         }
     }
 }
