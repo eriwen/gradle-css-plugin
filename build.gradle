@@ -5,7 +5,7 @@ apply plugin: 'idea'
 
 defaultTasks 'clean', 'build'
 
-version = '1.1.1'
+version = '1.1.2'
 group = 'com.eriwen'
 ext.artifact = 'gradle-css-plugin'
 ext.isSnapshot = version.endsWith("-SNAPSHOT")
@@ -51,6 +51,10 @@ jar {
     baseName = artifact
 }
 
+jar << {
+    println System.properties['JAVA_HOME']
+}
+
 task sourceJar(type: Jar) {
     description = 'An archive of the source code for Maven Central'
     classifier = 'sources'
@@ -64,7 +68,7 @@ task groovydocJar(type: Jar) {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '1.1'
+    gradleVersion = '1.2'
 }
 
 artifacts {
