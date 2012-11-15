@@ -31,13 +31,13 @@ task clean(type: Delete) {
     delete buildDir
 }
 
-// Combine JS files
+// Combine CSS files
 task combine(type: com.eriwen.gradle.css.tasks.CombineCssTask) {
     source = css.source.custom.css.files
     dest = "${buildDir}/all.css"
 }
 
-// Minify with Google Closure Compiler
+// Minify with YUI Compressor
 task minify(type: com.eriwen.gradle.css.tasks.MinifyCssTask) {
     source = combine
     dest = file("${buildDir}/all-min.css")
