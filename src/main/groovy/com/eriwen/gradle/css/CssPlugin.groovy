@@ -35,8 +35,6 @@ class CssPlugin implements Plugin<Project> {
         project.task('combineCss', type: CombineCssTask, group: 'Build', description: 'Minify CSS using YUI Minifier') {}
         project.task('gzipCss', type: GzipCssTask, group: 'Build', description: 'GZip a given CSS file') {}
         project.task('csslint', type: CssLintTask, group: 'Verification', description: 'Analyze CSS sources with CSS Lint') {}
-        // project.task('sass', type: CompileSassTask) {}
-        // project.task('kss', type: KssTask) {}
     }
 
     void configureDependencies(final Project project) {
