@@ -20,8 +20,6 @@ dependencies {
     compile('com.yahoo.platform.yui:yuicompressor:2.4.7') {
         exclude module: 'junit'
     }
-    compile 'org.jruby:jruby-complete:1.6.7.2'
-    //runtime 'me.n4u.sass:sass-gems:3.1.16'
     testCompile ('org.spockframework:spock-core:0.6-groovy-1.8') {
         exclude module: "junit-dep"
         exclude module: "groovy-all"
@@ -68,7 +66,7 @@ task groovydocJar(type: Jar) {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '1.2'
+    gradleVersion = '1.4'
 }
 
 artifacts {
