@@ -13,7 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package com.eriwen.gradle.css.tasks
+/*package com.eriwen.gradle.css.tasks
 
 import org.gradle.api.tasks.SourceTask
 import org.gradle.api.tasks.TaskAction
@@ -64,4 +64,4 @@ class CompileSassTask extends SourceTask {
         assert descendantPath.startsWith(rootPath)
         return descendantPath.substring(rootPath.length() + 1)
     }
-}
+}        */

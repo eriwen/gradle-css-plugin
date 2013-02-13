@@ -2,23 +2,20 @@ package com.eriwen.gradle.css
 
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
-import org.junit.Before
-import org.junit.After
-import org.junit.Test
+import spock.lang.Specification
 
-import static org.junit.Assert.*
-import org.gradle.api.tasks.TaskExecutionException
-
-class CssPluginTest {
+class CssPluginTest extends Specification  {
     Project project = ProjectBuilder.builder().build()
 
     def setup() {
-        project.apply(plugin: JsPlugin)
+        project.apply(plugin: CssPlugin)
     }
 
     def "extensions are installed"() {
         expect:
-        project.extensions.getByName("csslint") instanceof CssExtension
-        project.extensions.getByName("yuicompressor") instanceof CssExtension
+        project.extensions.getByName("csslint") instanceof CssLintExtension
+        project.extensions.getByName("yuicompressor") instanceof YuiCompressorExtension
+        project.extensions.getByName("less") instanceof LessExtension
+        project.extensions.getByName("css") instanceof CssExtension
     }
 }
