@@ -18,7 +18,7 @@ package com.eriwen.gradle.css
 import org.gradle.api.tasks.Input
 
 class CssLintExtension {
-    public static final NAME = "options"
+    public static final NAME = "csslint"
     @Input String format = 'compact'
     @Input Iterable<String> errors = []
     @Input Iterable<String> warnings = ['important','adjoining-classes','known-properties','box-sizing','box-model','outline-none','duplicate-background-images','compatible-vendor-prefixes','display-property-grouping','qualified-headings','fallback-colors','duplicate-properties','empty-rules','errors','shorthand','ids','gradients','font-sizes','font-faces','floats','underscore-property-hack','overqualified-elements','import','regex-selectors','rules-count','star-property-hack','text-indent','unique-headings','universal-selector','unqualified-attributes','vendor-prefix','zero-units']

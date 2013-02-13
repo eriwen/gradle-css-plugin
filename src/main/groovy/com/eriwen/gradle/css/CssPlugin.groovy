@@ -25,16 +25,18 @@ class CssPlugin implements Plugin<Project> {
         project.extensions.create(CssExtension.NAME, CssExtension, project)
         project.extensions.create(CssLintExtension.NAME, CssLintExtension)
         project.extensions.create(YuiCompressorExtension.NAME, YuiCompressorExtension)
+        project.extensions.create(LessExtension.NAME, LessExtension)
 
         configureDependencies(project)
         applyTasks(project)
     }
 
     void applyTasks(final Project project) {
-        project.task('minifyCss', type: MinifyCssTask, group: 'Build', description: 'Combine many CSS files into one') {}
-        project.task('combineCss', type: CombineCssTask, group: 'Build', description: 'Minify CSS using YUI Minifier') {}
+        project.task('minifyCss', type: MinifyCssTask, group: 'Build', description: 'Minify CSS using YUI Minifier') {}
+        project.task('combineCss', type: CombineCssTask, group: 'Build', description: 'Combine many CSS files into one') {}
         project.task('gzipCss', type: GzipCssTask, group: 'Build', description: 'GZip a given CSS file') {}
         project.task('csslint', type: CssLintTask, group: 'Verification', description: 'Analyze CSS sources with CSS Lint') {}
+        project.task('less', type: LessTask, group: 'Build', description: 'Compiles LESS files into CSS')
     }
 
     void configureDependencies(final Project project) {
