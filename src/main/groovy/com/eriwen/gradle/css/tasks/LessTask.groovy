@@ -1,5 +1,6 @@
 package com.eriwen.gradle.css.tasks
 
+import com.asual.lesscss.LessEngine
 import com.eriwen.gradle.css.ResourceUtil
 import com.eriwen.gradle.css.RhinoExec
 import org.gradle.api.tasks.Input
@@ -24,14 +25,7 @@ import org.gradle.api.tasks.TaskAction
  */
 
 class LessTask extends SourceTask {
-    private static final String REQUIREJS_PATH = 'less'
-    private static final String TMP_DIR = "tmp${File.separator}js"
-    private static final ResourceUtil RESOURCE_UTIL = new ResourceUtil()
-    private final RhinoExec rhino = new RhinoExec(project)
-
-    def intermediateDirectory = new File(project.buildDir, "less")
     @OutputFile def dest
-    @Input def ignoreExitCode = false
 
     File getDest() {
         project.file(dest)
@@ -39,31 +33,12 @@ class LessTask extends SourceTask {
 
     @TaskAction
     def run() {
-        final File requireJsFile = RESOURCE_UTIL.extractFileToDirectory(new File(project.buildDir, TMP_DIR), REQUIREJS_PATH)
-        LinkedHashMap<String, Object> options = [] // [optimize: "none", logLevel: 2, skipModuleInsertion: false, out: dest]
-        options.putAll(project.requirejs.options)
-
-        final List<String> args = [requireJsFile.canonicalPath]
-        args.add("-o")
-        if (project.requirejs.buildprofile != null && project.requirejs.buildprofile.class == File && project.requirejs.buildprofile.exists()) {
-            args.add("${project.requirejs.buildprofile.canonicalPath}")
-        }
-
-        def outAdded = false
-        if (!options.containsKey("out")) {
-            args.add("out=${getDest().canonicalPath}")
-            outAdded = true
-        }
-        options.each() { key, value ->
-            logger.debug("${key} == ${value}")
-            if (key.equalsIgnoreCase("out") & !outAdded) {
-                args.add("out=${getDest().canonicalPath}")
-                outAdded = true
-            } else {
-                args.add("${key}=${value}")
+        LessEngine engine = new LessEngine();
+        source.each {
+            if (it.absoluteFile.absolutePath.endsWith(".less")) {
+                def target = new File(getDest(), it.absoluteFile.name)
+                engine.compile(it.absoluteFile, target)
             }
         }
-
-        rhino.execute(args, [ignoreExitCode: ignoreExitCode, workingDir: project.projectDir.canonicalPath])
     }
 }
