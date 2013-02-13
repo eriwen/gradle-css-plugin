@@ -34,10 +34,19 @@ class LessTask extends SourceTask {
     @TaskAction
     def run() {
         LessEngine engine = new LessEngine();
-        source.each {
+        logger.debug "Processing ${source.files.size()} files"
+        source.files.each {
             if (it.absoluteFile.absolutePath.endsWith(".less")) {
-                def target = new File(getDest(), it.absoluteFile.name)
-                engine.compile(it.absoluteFile, target)
+                def target = new File(getDest(), it.absoluteFile.name.replace(".less", ".css"))
+                logger.debug "Processing ${it.canonicalPath} to ${target.canonicalPath}"
+                String output = engine.compile(it.absoluteFile)
+                if (target.exists()) {
+                    target.delete()
+                }
+
+                String cleansedOutput = output.replace("\\n", System.getProperty("line.separator"))
+
+                target << cleansedOutput
             }
         }
     }
