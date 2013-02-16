@@ -61,7 +61,6 @@ task gzip(type: com.eriwen.gradle.css.tasks.GzipCssTask) {
 csslint {
     source = css.source.custom.css.files
     dest = "${buildDir}/csslint.out"
-    options
     csslint {
         format = 'text'
         warnings = ['box-model', 'ids']
