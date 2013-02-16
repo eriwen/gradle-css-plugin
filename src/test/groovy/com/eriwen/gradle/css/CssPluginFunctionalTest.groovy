@@ -8,7 +8,7 @@ class CssPluginFunctionalTest extends FunctionalSpec {
         buildFile << applyPlugin(CssPlugin)
     }
 
-    def "tasks operation"() {
+    def "test tasks operation"() {
         given:
         buildFile << """
             css.source {
@@ -66,5 +66,43 @@ class CssPluginFunctionalTest extends FunctionalSpec {
         file("build/all-min.css").text.indexOf('#id1{color:green}') > -1
         file("build/all-min.css").text.indexOf('.class1{color:red}') > -1
         file("build/all-min.css").text.indexOf('selector{color:blue}') > -1
+    }
+
+    def "test csslint task"() {
+        given:
+        buildFile << """
+            css.source {
+                custom {
+                    css {
+                        srcDir "src/custom/css"
+                    }
+                }
+            }
+            csslint {
+               source = css.source.custom.css.files
+               dest = file("\$buildDir/csslint.out")
+            }
+        """
+        and:
+        file("src/custom/css/file1.css") << "#id1 { color: green; }"
+        and:
+        file("src/custom/css/file2.css") << ".class1 { color: red; }"
+
+        when:
+        run "csslint"
+
+        then:
+        def lines = file("build/csslint.out").text.split('\n')
+        lines[0].endsWith('file1.css: line 1, col 1, Warning - Don\'t use IDs in selectors.')
+        lines[2].endsWith('file2.css: Lint Free!')
+
+        and:
+        wasExecuted ":csslint"
+
+        when:
+        run "csslint"
+
+        then:
+        wasUpToDate ":csslint"
     }
 }
