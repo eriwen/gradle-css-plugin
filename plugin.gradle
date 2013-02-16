@@ -4,7 +4,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.eriwen:gradle-css-plugin:1.1.2'
+        classpath 'com.eriwen:gradle-css-plugin:1.2'
     }
 }
 buildscript {
@@ -23,6 +23,12 @@ css.source {
         css {
             srcDir "src/test/resources"
             include "file*.css"
+        }
+    }
+    compiled {
+        css {
+            srcDir "src/test/resources"
+            include "*.less"
         }
     }
 }
@@ -55,10 +61,15 @@ task gzip(type: com.eriwen.gradle.css.tasks.GzipCssTask) {
 csslint {
     source = css.source.custom.css.files
     dest = "${buildDir}/csslint.out"
-    options {
+    options
+    csslint {
         format = 'text'
         warnings = ['box-model', 'ids']
         errors = []
     }
 }
 
+less {
+    source = css.source.compiled.css.files
+    dest = "${buildDir}/styles"
+}
