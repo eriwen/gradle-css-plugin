@@ -62,8 +62,3 @@ csslint {
     }
 }
 
-kss {
-    source = css.source.custom.css.files
-    sourceDir = file("src/test/resources")
-    dest = file("${buildDir}/kss.out")
-}
