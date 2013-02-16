@@ -1,19 +1,11 @@
 package com.eriwen.gradle.css
 
 import org.gradle.api.Project
-import org.gradle.process.internal.ExecException
 import org.gradle.testfixtures.ProjectBuilder
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
-/**
- * Created with IntelliJ IDEA.
- * User: joe
- * Date: 2/13/13
- * Time: 11:48 AM
- * To change this template use File | Settings | File Templates.
- */
 class LessPluginTest extends Specification {
     @Rule TemporaryFolder dir = new TemporaryFolder()
 

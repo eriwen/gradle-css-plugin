@@ -39,9 +39,9 @@ class CssLintTask extends SourceTask {
                 new File(project.buildDir, TMP_DIR), CSSLINT_PATH)
         final List<String> args = [csslintJsFile.canonicalPath]
         args.addAll(source.files.collect { it.canonicalPath })
-        args.add("--format=${project.options.format}")
-        args.add("--errors=${project.options.errors.join(',')}")
-        args.add("--warnings=${project.options.warnings.join(',')}")
+        args.add("--format=${project.csslint.format}")
+        args.add("--errors=${project.csslint.errors.join(',')}")
+        args.add("--warnings=${project.csslint.warnings.join(',')}")
         rhino.execute(args, [out: new FileOutputStream(dest as File)])
     }
 }

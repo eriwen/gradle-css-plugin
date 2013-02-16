@@ -1,15 +1,5 @@
-package com.eriwen.gradle.css.tasks
-
-import com.asual.lesscss.LessEngine
-import com.eriwen.gradle.css.ResourceUtil
-import com.eriwen.gradle.css.RhinoExec
-import org.gradle.api.tasks.Input
-import org.gradle.api.tasks.OutputFile
-import org.gradle.api.tasks.SourceTask
-import org.gradle.api.tasks.TaskAction
-
 /**
- * Copyright 2012 Joe Fitzgerald
+ * Copyright 2013 Joe Fitzgerald
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -23,6 +13,12 @@ import org.gradle.api.tasks.TaskAction
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
+package com.eriwen.gradle.css.tasks
+
+import com.asual.lesscss.LessEngine
+import org.gradle.api.tasks.OutputFile
+import org.gradle.api.tasks.SourceTask
+import org.gradle.api.tasks.TaskAction
 
 class LessTask extends SourceTask {
     @OutputFile def dest

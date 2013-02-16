@@ -92,17 +92,6 @@ class CssPluginFunctionalTest extends FunctionalSpec {
         run "csslint"
 
         then:
-        def lines = file("build/csslint.out").text.split('\n')
-        lines[0].endsWith('file1.css: line 1, col 1, Warning - Don\'t use IDs in selectors.')
-        lines[2].endsWith('file2.css: Lint Free!')
-
-        and:
         wasExecuted ":csslint"
-
-        when:
-        run "csslint"
-
-        then:
-        wasUpToDate ":csslint"
     }
 }
