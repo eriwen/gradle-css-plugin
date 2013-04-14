@@ -5,7 +5,10 @@ apply plugin: 'idea'
 
 defaultTasks 'clean', 'build'
 
-version = '1.2'
+sourceCompatibility = '1.6'
+targetCompatibility = '1.6'
+
+version = '1.2.1'
 group = 'com.eriwen'
 ext.artifact = 'gradle-css-plugin'
 ext.isSnapshot = version.endsWith("-SNAPSHOT")
@@ -68,7 +71,7 @@ task groovydocJar(type: Jar) {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '1.4'
+    gradleVersion = '1.5'
 }
 
 artifacts {
