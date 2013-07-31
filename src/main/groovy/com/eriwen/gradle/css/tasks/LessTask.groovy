@@ -16,12 +16,12 @@
 package com.eriwen.gradle.css.tasks
 
 import com.asual.lesscss.LessEngine
-import org.gradle.api.tasks.OutputFile
+import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.SourceTask
 import org.gradle.api.tasks.TaskAction
 
 class LessTask extends SourceTask {
-    @OutputFile def dest
+    @OutputDirectory def dest
 
     File getDest() {
         project.file(dest)
