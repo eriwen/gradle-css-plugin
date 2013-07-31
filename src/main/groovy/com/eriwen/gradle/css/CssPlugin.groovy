@@ -36,7 +36,7 @@ class CssPlugin implements Plugin<Project> {
         project.task('combineCss', type: CombineCssTask, group: 'Build', description: 'Combine many CSS files into one') {}
         project.task('gzipCss', type: GzipCssTask, group: 'Build', description: 'GZip a given CSS file') {}
         project.task('csslint', type: CssLintTask, group: 'Verification', description: 'Analyze CSS sources with CSS Lint') {}
-        project.task('less', type: LessTask, group: 'Build', description: 'Compiles LESS files into CSS')
+        project.task('lesscss', type: LessTask, group: 'Build', description: 'Compiles LESS files into CSS')
     }
 
     void configureDependencies(final Project project) {

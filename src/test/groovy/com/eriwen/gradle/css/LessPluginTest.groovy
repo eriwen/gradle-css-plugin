@@ -17,7 +17,7 @@ class LessPluginTest extends Specification {
 
     def setup() {
         project.apply(plugin: CssPlugin)
-        task = project.tasks.less
+        task = project.tasks.lesscss
         src = dir.newFolder()
         task.source = src
         task.dest = dir.newFolder()
