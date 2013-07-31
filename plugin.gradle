@@ -68,7 +68,7 @@ csslint {
     }
 }
 
-less {
+lesscss {
     source = css.source.compiled.css.files
     dest = "${buildDir}/styles"
 }
