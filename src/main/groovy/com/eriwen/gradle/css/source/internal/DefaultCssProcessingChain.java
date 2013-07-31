@@ -62,6 +62,7 @@ public class DefaultCssProcessingChain extends DefaultNamedDomainObjectList<Sour
     }
     
     public <T extends SourceTask> T task(String name, Class<T> type, Closure closure) {
+        @SuppressWarnings("unchecked")
         T task = (T)project.task(Collections.singletonMap("type", type), name, closure);
         add(task);
         return task;

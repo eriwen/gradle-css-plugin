@@ -50,12 +50,16 @@ idea.project.ipr.withXml { provider ->
     gradleSettings.appendNode('option', [name: 'SDK_HOME', value: gradle.gradleHomeDir.absolutePath])
 }
 
-jar {
-    baseName = artifact
+compileGroovy {
+    options.compilerArgs = ['-Xlint:deprecation', '-Xlint:unchecked']
 }
 
-jar << {
-    println System.properties['JAVA_HOME']
+jar {
+    baseName = artifact
+    doLast { 
+        // assuming this is here for a reason, leaving it in
+        println " JAVA_HOME: ${System.properties['JAVA_HOME']}"
+    }
 }
 
 task sourceJar(type: Jar) {
