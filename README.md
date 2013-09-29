@@ -47,6 +47,23 @@ gzipCss {
 }
 ```
 
+**[LESS Support](http://lesscss.org)**
+```groovy
+css.source {
+    dev {
+        css {
+            srcDir "app/styles"
+            include "*.less"
+        }
+    }
+}
+
+less {
+    source = css.source.dev.css.files
+    dest = "${buildDir}/styles"
+}
+```
+
 **Supports [CSS Lint v0.9.8](http://csslint.net)**
 ```groovy
 csslint {
@@ -60,19 +77,23 @@ csslint {
 }
 ```
 
-# Available Tasks and Options #
-### combineCss ###
+# Available Tasks and Options
+### combineCss
 - source = Collection of file paths of files to merge
 - dest = File/String Path for combined output
 
-### minifyCss (Uses the [YUI Compressor](http://developer.yahoo.com/yui/compressor/)) ###
+### minifyCss (Uses the [YUI Compressor](http://developer.yahoo.com/yui/compressor/))
 - source = File to minify
 - dest = File for minified output
 - *(Optional)* yuicompressor.lineBreakPos = -1 (default) Insert a line break after the specified column number
 
-### gzipCss ###
+### gzipCss
 - source = File to compress
 - dest = File/String path for compressed output
+
+### less
+- source = Files to transpile
+- dest = File/String output directory
 
 ### csslint ###
 - source = Collection of file paths of files to analyze
