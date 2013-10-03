@@ -8,7 +8,7 @@ defaultTasks 'clean', 'build'
 sourceCompatibility = '1.6'
 targetCompatibility = '1.6'
 
-version = '1.2.1'
+version = '1.2.2'
 group = 'com.eriwen'
 ext.artifact = 'gradle-css-plugin'
 ext.isSnapshot = version.endsWith("-SNAPSHOT")
@@ -18,7 +18,7 @@ repositories {
 }
 
 dependencies {
-    groovy localGroovy()
+    compile localGroovy()
     compile gradleApi()
     compile('com.yahoo.platform.yui:yuicompressor:2.4.7') {
         exclude module: 'junit'
@@ -75,7 +75,7 @@ task groovydocJar(type: Jar) {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '1.5'
+    gradleVersion = '1.8'
 }
 
 artifacts {
