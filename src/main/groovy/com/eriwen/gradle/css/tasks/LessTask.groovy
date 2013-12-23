@@ -31,19 +31,29 @@ class LessTask extends SourceTask {
     def run() {
         LessEngine engine = new LessEngine();
         logger.debug "Processing ${source.files.size()} files"
-        source.files.each {
-            if (it.absoluteFile.absolutePath.endsWith(".less")) {
-                def target = new File(getDest(), it.absoluteFile.name.replace(".less", ".css"))
-                logger.debug "Processing ${it.canonicalPath} to ${target.canonicalPath}"
-                String output = engine.compile(it.absoluteFile)
-                if (target.exists()) {
-                    target.delete()
+
+        source.visit { visitDetail ->
+            if(visitDetail.directory){
+                visitDetail.relativePath.getFile(getDest()).mkdir()
+            } else {
+                if(visitDetail.name.endsWith(".less")){
+                    def relativePathToCss = visitDetail.relativePath.replaceLastName(visitDetail.name.replace(".less", ".css"))
+                    compileLess(engine, visitDetail.file, relativePathToCss.getFile(getDest()))
+                } else {
+                    logger.debug("Copying non-less resource ${visitDetail.file.absolutePath} to ${getDest().absolutePath}")
+                    visitDetail.copyTo(visitDetail.relativePath.getFile(getDest()))
                 }
-
-                String cleansedOutput = output.replace("\\n", System.getProperty("line.separator"))
-
-                target << cleansedOutput
             }
         }
+    }
+
+    def compileLess(engine, src, target){
+        logger.debug "Processing ${src.canonicalPath} to ${target.canonicalPath}"
+        String output = engine.compile(src.absoluteFile)
+        if (target.exists()) {
+            target.delete()
+        }
+        String cleansedOutput = output.replace("\\n", System.getProperty("line.separator"))
+        target << cleansedOutput
     }
 }
