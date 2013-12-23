@@ -58,7 +58,7 @@ css.source {
     }
 }
 
-less {
+lesscss {
     source = css.source.dev.css.files
     dest = "${buildDir}/styles"
 }
