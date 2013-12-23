@@ -12,7 +12,7 @@ class LessPluginTest extends Specification {
     Project project = ProjectBuilder.builder().build()
     def task
     File src
-    File outputFile
+    List<File> outputFiles
     String expectedOutput
 
     def setup() {
@@ -21,7 +21,7 @@ class LessPluginTest extends Specification {
         src = dir.newFolder()
         task.source = src
         task.dest = dir.newFolder()
-        outputFile = new File(task.dest, "sample.css")
+        outputFiles = [new File(task.dest as String, "sample.css"), new File(task.dest as String, "/sub/sample.css")]
         expectedOutput = new File("src/test/resources/expectedsampleoutput.css").text
     }
 
@@ -34,16 +34,18 @@ class LessPluginTest extends Specification {
 
         then:
         notThrown Exception
-        outputFile.exists()
-        outputFile.text.contentEquals(expectedOutput)
+        outputFiles*.exists()
+        outputFiles*.text*.contentEquals(expectedOutput)
     }
 
     def addSampleFile() {
         addFile("sample.less", new File("src/test/resources/sample.less").text)
+        addFile("sub/sample.less", new File("src/test/resources/sample.less").text)
     }
 
     def addFile(name,contents) {
         def file = new File(src as String, name)
+        new File(file.parent).mkdirs()
         file << contents
     }
 }
