@@ -23,6 +23,27 @@ import org.gradle.api.tasks.TaskAction
 class LessTask extends SourceTask {
     @OutputDirectory def dest
 
+    /** 
+     * A custom exception to wrap the compiler error and the file it occurred 
+     * in in one exception so that gradle build failure messaging contains all the 
+     * relevant information. 
+     */
+    static class LessCompilationException extends RuntimeException {
+        File file
+        def project
+
+        LessCompilationException(cause, file, project) {
+            super(cause)
+            this.file = file
+            this.project = project
+        }
+
+        String getMessage() {
+            """Less compilation error in file: ${project.relativePath(file)}
+              |${cause.message}""".stripMargin()
+        }
+    }
+
     File getDest() {
         project.file(dest)
     }
@@ -49,10 +70,18 @@ class LessTask extends SourceTask {
 
     def compileLess(engine, src, target){
         logger.debug "Processing ${src.canonicalPath} to ${target.canonicalPath}"
-        String output = engine.compile(src.absoluteFile)
+        
+        String output
+        try {
+            output = engine.compile(src.absoluteFile)
+        } catch (e) {
+            throw new LessCompilationException(e, src, project.rootProject)
+        }
+
         if (target.exists()) {
             target.delete()
         }
+
         String cleansedOutput = output.replace("\\n", System.getProperty("line.separator"))
         target << cleansedOutput
     }

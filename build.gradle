@@ -8,7 +8,7 @@ defaultTasks 'clean', 'build'
 sourceCompatibility = '1.6'
 targetCompatibility = '1.6'
 
-version = '1.8.0'
+version = '1.8.1'
 group = 'com.eriwen'
 ext.artifact = 'gradle-css-plugin'
 ext.isSnapshot = version.endsWith("-SNAPSHOT")
@@ -146,3 +146,22 @@ def getPomConfiguration() {
     }
 }
 
+// Builds a fat jar with all runtime depencies. Useful for testing the plugin locally 
+// from a separate project without the need to upload it to a maven repository for transitive
+// dependency resolution
+task fatjar(type: Jar) {
+    dependsOn 'classes'
+
+    from jar.source
+    
+    def gradleJars = dependencies.gradleApi().resolve()
+    from {
+        configurations.compile.findAll { 
+            !(it in gradleJars)
+        }.collect { 
+            it.isDirectory() ? it : zipTree(it) 
+        }
+    }
+
+    baseName = "$artifact-fat"
+}
