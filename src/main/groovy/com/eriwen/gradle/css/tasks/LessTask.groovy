@@ -16,6 +16,7 @@
 package com.eriwen.gradle.css.tasks
 
 import com.asual.lesscss.LessEngine
+import com.asual.lesscss.LessException
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.SourceTask
 import org.gradle.api.tasks.TaskAction
@@ -39,7 +40,12 @@ class LessTask extends SourceTask {
         }
 
         String getMessage() {
-            """Less compilation error in file: ${project.relativePath(file)}
+            def path = project.relativePath(file)
+            def context = (cause instanceof LessException) ?
+                "Less compilation error at ${path}:${cause.line}" :
+                "Less compilation error in file ${path}"
+
+            """$context
               |${cause.message}""".stripMargin()
         }
     }
