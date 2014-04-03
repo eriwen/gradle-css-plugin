@@ -11,14 +11,10 @@ import org.gradle.api.internal.project.ProjectInternal;
 public abstract class InternalGradle {
 
    public static Instantiator toInstantiator(Project project) {
-      return toProjectInternal(project).getServices().get(Instantiator.class);
-   }
-
-   public static ProjectInternal toProjectInternal(Project project) {
-      return ((ProjectInternal)project);
+      return project.gradle.services.get(Instantiator)
    }
 
    public static FileResolver toFileResolver(Project project) {
-      return toProjectInternal(project).getFileResolver();
+      return project.gradle.fileResolver
    }
 }
