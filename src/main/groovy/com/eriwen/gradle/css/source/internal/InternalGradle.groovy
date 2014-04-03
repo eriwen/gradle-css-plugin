@@ -15,6 +15,6 @@ public abstract class InternalGradle {
    }
 
    public static FileResolver toFileResolver(Project project) {
-      return project.gradle.fileResolver
+      return project.fileResolver
    }
 }
