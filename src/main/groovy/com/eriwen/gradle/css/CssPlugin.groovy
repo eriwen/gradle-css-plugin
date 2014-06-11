@@ -18,11 +18,24 @@ package com.eriwen.gradle.css
 import org.gradle.api.Project
 import org.gradle.api.Plugin
 import com.eriwen.gradle.css.tasks.*
+import org.gradle.api.internal.file.FileResolver
+import org.gradle.internal.reflect.Instantiator
+
+import javax.inject.Inject
 
 class CssPlugin implements Plugin<Project> {
 
+    private final Instantiator instantiator;
+    private final FileResolver fileResolver;
+
+    @Inject
+    public CssPlugin(Instantiator instantiator, FileResolver fileResolver) {
+        this.instantiator = instantiator;
+        this.fileResolver = fileResolver;
+    }
+
     void apply(final Project project) {
-        project.extensions.create(CssExtension.NAME, CssExtension, project)
+        project.extensions.create(CssExtension.NAME, CssExtension, project, instantiator, fileResolver)
         project.extensions.create(CssLintExtension.NAME, CssLintExtension)
         project.extensions.create(YuiCompressorExtension.NAME, YuiCompressorExtension)
         project.extensions.create(LessExtension.NAME, LessExtension)
