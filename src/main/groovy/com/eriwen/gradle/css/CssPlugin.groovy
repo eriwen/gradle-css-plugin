@@ -56,9 +56,6 @@ class CssPlugin implements Plugin<Project> {
         project.configurations {
             rhino
         }
-        project.repositories {
-            mavenCentral()
-        }
         project.dependencies {
             rhino 'org.mozilla:rhino:1.7R3'
         }
