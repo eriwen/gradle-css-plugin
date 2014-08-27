@@ -64,7 +64,7 @@ lesscss {
 }
 ```
 
-**Supports [CSS Lint v0.9.8](http://csslint.net)**
+**Supports [CSS Lint v0.9.10](http://csslint.net)**
 ```groovy
 csslint {
     source = css.source.dev.css.files
