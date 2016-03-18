@@ -2,6 +2,14 @@
 
 Managing your CSS in a [Gradle](http://gradle.org) build is super easy now! Just add this to your *build.gradle* file:
 
+### Gradle 2.1+
+```groovy
+plugins {
+  id "com.eriwen.gradle.css" version "2.12.0"
+}
+```
+
+### Gradle 2.0-
 ```groovy
 // Grab the plugin from a Maven Repo automatically
 buildscript {
@@ -9,7 +17,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.eriwen:gradle-css-plugin:1.11.1'
+        classpath 'com.eriwen:gradle-css-plugin:2.12.0'
     }
 }
 
@@ -69,11 +77,6 @@ lesscss {
 csslint {
     source = css.source.dev.css.files
     dest = "${buildDir}/csslint.out"
-    options { // Optional
-        format = 'lint-xml'
-        warnings = ['box-model', 'empty-rules', 'duplicate-properties']
-        errors = []
-    }
 }
 ```
 
@@ -98,9 +101,9 @@ csslint {
 ### csslint ###
 - source = Collection of file paths of files to analyze
 - dest = File for output
-- *(Optional)* options.format = 'compact' (default), 'text', 'lint-xml', or 'checkstyle-xml'
-- *(Optional)* options.warnings = (default is all) Collection of string ids for checks. Try `csslint --list-rules` to see all possible IDs
-- *(Optional)* options.errors = (default is none) Collection of string ids for checks. CAUTION: These cause a non-zero exit code and _fail the build!_
+- *(Optional)* format = 'compact' (default), 'text', 'lint-xml', or 'checkstyle-xml'
+- *(Optional)* warnings = (default is all) Collection of string ids for checks. Try `csslint --list-rules` to see all possible IDs
+- *(Optional)* errors = (default is none) Collection of string ids for checks. CAUTION: These cause a non-zero exit code and _fail the build!_
 
 What, you want more? [Let me know!](https://github.com/eriwen/gradle-css-plugin/issues)
 

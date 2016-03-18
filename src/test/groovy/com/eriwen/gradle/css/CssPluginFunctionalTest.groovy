@@ -1,13 +1,10 @@
 package com.eriwen.gradle.css
 
 import com.eriwen.gradle.css.util.FunctionalSpec
+import org.gradle.testkit.runner.BuildResult
+import org.gradle.testkit.runner.TaskOutcome
 
 class CssPluginFunctionalTest extends FunctionalSpec {
-
-    def setup() {
-        buildFile << applyPlugin(CssPlugin)
-    }
-
     def "test tasks operation"() {
         given:
         buildFile << """
@@ -30,42 +27,38 @@ class CssPluginFunctionalTest extends FunctionalSpec {
             }
         """
         and:
-        file("src/custom/css/file1.css") << "#id1 { color: green; }"
-        and:
-        file("src/custom/css/file2.css") << ".class1 { color: red; }"
+        tempProjectDir.newFolder('src', 'custom', 'css')
+        tempProjectDir.newFile("src/custom/css/file1.css") << "#id1 { color: green; }"
+        tempProjectDir.newFile("src/custom/css/file2.css") << ".class1 { color: red; }"
 
         when:
-        run "minifyCss"
+        BuildResult result = build('minifyCss')
 
         then:
-        file("build/all-min.css").text.indexOf('#id1{color:green}') > -1
-        file("build/all-min.css").text.indexOf('.class1{color:red}') > -1
+        File minifiedCss = new File(projectDir, 'build/all-min.css')
+        minifiedCss.exists()
+        minifiedCss.text.indexOf('#id1{color:green}') > -1
+        minifiedCss.text.indexOf('.class1{color:red}') > -1
 
         and:
-        wasExecuted ":combineCss" //Test dependency inference
-        wasExecuted ":minifyCss"
+        result.task(':combineCss').outcome == TaskOutcome.SUCCESS
+        result.task(':minifyCss').outcome == TaskOutcome.SUCCESS
 
         when:
-        run "minifyCss"
+        BuildResult secondResult = build('minifyCss')
 
         then:
-        wasUpToDate ":combineCss" //Test proper sourceSet detection
-        wasUpToDate ":minifyCss"
+        secondResult.task(':combineCss').outcome == TaskOutcome.UP_TO_DATE
+        secondResult.task(':minifyCss').outcome == TaskOutcome.UP_TO_DATE
 
         when:
-        file("src/custom/css/file3.css") << "selector { color: blue; }"
+        tempProjectDir.newFile("src/custom/css/file3.css") << "selector { color: blue; }"
 
         and:
-        run "minifyCss"
+        BuildResult thirdResult = build('minifyCss')
 
         then:
-        !wasUpToDate(":minifyCss")
-
-        and:
-        // NOTE: File order is not guaranteed
-        file("build/all-min.css").text.indexOf('#id1{color:green}') > -1
-        file("build/all-min.css").text.indexOf('.class1{color:red}') > -1
-        file("build/all-min.css").text.indexOf('selector{color:blue}') > -1
+        thirdResult.task(':minifyCss').outcome == TaskOutcome.SUCCESS
     }
 
     def "test csslint task"() {
@@ -84,14 +77,14 @@ class CssPluginFunctionalTest extends FunctionalSpec {
             }
         """
         and:
-        file("src/custom/css/file1.css") << "#id1 { color: green; }"
-        and:
-        file("src/custom/css/file2.css") << ".class1 { color: red; }"
+        tempProjectDir.newFolder('src', 'custom', 'css')
+        tempProjectDir.newFile("src/custom/css/file1.css") << "#id1 { color: green; }"
+        tempProjectDir.newFile("src/custom/css/file2.css") << ".class1 { color: red; }"
 
         when:
-        run "csslint"
+        BuildResult result = build('csslint')
 
         then:
-        wasExecuted ":csslint"
+        result.task(':csslint').outcome == TaskOutcome.SUCCESS
     }
 }
