@@ -36,7 +36,6 @@ class CssPlugin implements Plugin<Project> {
 
     void apply(final Project project) {
         project.extensions.create(CssExtension.NAME, CssExtension, project, instantiator, fileResolver)
-        project.extensions.create(CssLintExtension.NAME, CssLintExtension)
         project.extensions.create(YuiCompressorExtension.NAME, YuiCompressorExtension)
         project.extensions.create(LessExtension.NAME, LessExtension)
 

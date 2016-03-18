@@ -15,6 +15,7 @@
  */
 package com.eriwen.gradle.css.tasks
 
+import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
 import com.eriwen.gradle.css.ResourceUtil
 import com.eriwen.gradle.css.RhinoExec
@@ -28,6 +29,9 @@ class CssLintTask extends SourceTask {
     private final RhinoExec rhino = new RhinoExec(project)
 
     @OutputFile def dest
+    @Input String format = 'compact'
+    @Input Iterable<String> errors = []
+    @Input Iterable<String> warnings = ['important','adjoining-classes','known-properties','box-sizing','box-model','outline-none','duplicate-background-images','compatible-vendor-prefixes','display-property-grouping','qualified-headings','fallback-colors','duplicate-properties','empty-rules','errors','shorthand','ids','gradients','font-sizes','font-faces','floats','underscore-property-hack','overqualified-elements','import','regex-selectors','rules-count','star-property-hack','text-indent','unique-headings','universal-selector','unqualified-attributes','vendor-prefix','zero-units']
 
     File getDest() {
         project.file(dest)
@@ -39,9 +43,9 @@ class CssLintTask extends SourceTask {
                 new File(project.buildDir, TMP_DIR), CSSLINT_PATH)
         final List<String> args = [csslintJsFile.canonicalPath]
         args.addAll(source.files.collect { it.canonicalPath })
-        args.add("--format=${project.csslint.format}")
-        args.add("--errors=${project.csslint.errors.join(',')}")
-        args.add("--warnings=${project.csslint.warnings.join(',')}")
+        args.add("--format=${format}")
+        args.add("--errors=${errors.join(',')}")
+        args.add("--warnings=${warnings.join(',')}")
         rhino.execute(args, [out: new FileOutputStream(dest as File)])
     }
 }
