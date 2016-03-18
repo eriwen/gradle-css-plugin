@@ -95,7 +95,7 @@ class CssPluginFunctionalTest extends FunctionalSpec {
                 source {
                     main {
                         css {
-                            srcDir 'src/main/webapp'
+                            srcDir 'src/custom/less'
                             include '**/*.less'
                         }
                     }
@@ -107,17 +107,18 @@ class CssPluginFunctionalTest extends FunctionalSpec {
             }
         """
         and:
-        file('src/main/webapp/vars.less') << '@color: #4d926f; '
-        and:
-        file('src/main/webapp/page/page.less') << "@import '../vars.less'; " +
+        tempProjectDir.newFolder('src', 'custom', 'less')
+        tempProjectDir.newFile("src/custom/less/vars.less") << '@color: #4d926f; '
+        tempProjectDir.newFile("src/custom/less/page.less") << "@import './vars.less'; " +
                 'h1 { color: @color; }'
 
         when:
-        run 'lesscss'
+        BuildResult result = build('lesscss')
 
         then:
-        wasExecuted ':lesscss'
+        result.task(':lesscss').outcome == TaskOutcome.SUCCESS
+
         and:
-        file("build/less/page/page.css").text.indexOf('color: #4d926f;') > -1
+        new File(projectDir, 'build/less/page.css').text.indexOf('color: #4d926f;') > -1
     }
 }
