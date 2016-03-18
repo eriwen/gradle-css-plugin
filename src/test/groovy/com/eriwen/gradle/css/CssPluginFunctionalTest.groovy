@@ -87,4 +87,37 @@ class CssPluginFunctionalTest extends FunctionalSpec {
         then:
         result.task(':csslint').outcome == TaskOutcome.SUCCESS
     }
+
+    def "test lesscss task"() {
+        given:
+        buildFile << """
+            css {
+                source {
+                    main {
+                        css {
+                            srcDir 'src/main/webapp'
+                            include '**/*.less'
+                        }
+                    }
+                }
+            }
+            lesscss {
+                source = css.source.main.css.asFileTree
+                dest = file("\$buildDir/less/")
+            }
+        """
+        and:
+        file('src/main/webapp/vars.less') << '@color: #4d926f; '
+        and:
+        file('src/main/webapp/page/page.less') << "@import '../vars.less'; " +
+                'h1 { color: @color; }'
+
+        when:
+        run 'lesscss'
+
+        then:
+        wasExecuted ':lesscss'
+        and:
+        file("build/less/page/page.css").text.indexOf('color: #4d926f;') > -1
+    }
 }

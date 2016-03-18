@@ -67,7 +67,7 @@ css.source {
 }
 
 lesscss {
-    source = css.source.dev.css.files
+    source = css.source.dev.css.asFileTree
     dest = "${buildDir}/styles"
 }
 ```
