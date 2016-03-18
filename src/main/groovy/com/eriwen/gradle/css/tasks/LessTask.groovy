@@ -22,9 +22,10 @@ import org.gradle.api.tasks.SourceTask
 import org.gradle.api.tasks.TaskAction
 
 class LessTask extends SourceTask {
-    @OutputDirectory def dest
+    @OutputDirectory
+    def dest
 
-    /** 
+    /**
      * A custom exception to wrap the compiler error and the file it occurred 
      * in in one exception so that gradle build failure messaging contains all the 
      * relevant information. 
@@ -42,8 +43,8 @@ class LessTask extends SourceTask {
         String getMessage() {
             def path = project.relativePath(file)
             def context = (cause instanceof LessException) ?
-                "Less compilation error at ${path}:${cause.line}" :
-                "Less compilation error in file ${path}"
+                    "Less compilation error at ${path}:${cause.line}" :
+                    "Less compilation error in file ${path}"
 
             """$context
               |${cause.message}""".stripMargin()
@@ -60,12 +61,15 @@ class LessTask extends SourceTask {
         logger.debug "Processing ${source.files.size()} files"
 
         source.visit { visitDetail ->
-            if(visitDetail.directory){
+            if (visitDetail.directory) {
                 visitDetail.relativePath.getFile(getDest()).mkdir()
             } else {
-                if(visitDetail.name.endsWith(".less")){
-                    def relativePathToCss = visitDetail.relativePath.replaceLastName(visitDetail.name.replace(".less", ".css"))
-                    compileLess(engine, visitDetail.file, relativePathToCss.getFile(getDest()))
+                if (visitDetail.name.endsWith(".less")) {
+                    // By convention _foo.less files are include-only
+                    if (!visitDetail.name.startsWith("_")) {
+                        def relativePathToCss = visitDetail.relativePath.replaceLastName(visitDetail.name.replace(".less", ".css"))
+                        compileLess(engine, visitDetail.file, relativePathToCss.getFile(getDest()))
+                    }
                 } else {
                     logger.debug("Copying non-less resource ${visitDetail.file.absolutePath} to ${getDest().absolutePath}")
                     visitDetail.copyTo(visitDetail.relativePath.getFile(getDest()))
@@ -74,9 +78,9 @@ class LessTask extends SourceTask {
         }
     }
 
-    def compileLess(engine, src, target){
+    def compileLess(engine, src, target) {
         logger.debug "Processing ${src.canonicalPath} to ${target.canonicalPath}"
-        
+
         String output
         try {
             output = engine.compile(src.absoluteFile)
