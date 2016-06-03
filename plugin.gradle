@@ -1,16 +1,14 @@
 buildscript {
     repositories {
-        mavenLocal()
-        mavenCentral()
+        jcenter()
     }
     dependencies {
-        classpath 'com.eriwen:gradle-css-plugin:2.12.0-SNAPSHOT'
+        classpath 'com.eriwen:gradle-css-plugin:2.12.0'
     }
 }
 
 repositories {
-    mavenLocal()
-    mavenCentral()
+    jcenter()
 }
 
 apply plugin: 'css'
