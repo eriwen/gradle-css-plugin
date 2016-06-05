@@ -50,7 +50,11 @@ class DefaultCssSourceSet implements CssSourceSet {
     }
 
     CssSourceSet configure(Closure closure) {
-        ConfigureUtil.configure(closure, this, false)
+        if (GradleVersion.current().compareTo(GradleVersion.version("2.14")) >= 0) {
+            ConfigureUtil.configureSelf(closure, this)
+        } else {
+            ConfigureUtil.configure(closure, this, false)
+        }
     }
 
     CssProcessingChain getProcessing() {
