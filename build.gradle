@@ -15,7 +15,7 @@ targetCompatibility = 1.6
 
 defaultTasks 'clean', 'build'
 
-version = '2.12.0'
+version = '2.14.0'
 group = 'com.eriwen'
 ext.artifact = 'gradle-css-plugin'
 ext.isSnapshot = version.endsWith("-SNAPSHOT")
@@ -49,6 +49,7 @@ dependencies {
         exclude module: 'junit-dep'
         exclude module: 'groovy-all'
     }
+    testCompile 'commons-lang:commons-lang:2.6'
 }
 
 idea.module {
