@@ -5,7 +5,7 @@ Managing your CSS in a [Gradle](http://gradle.org) build is super easy now! Just
 ### Gradle 2.1+
 ```groovy
 plugins {
-  id "com.eriwen.gradle.css" version "2.12.0"
+  id "com.eriwen.gradle.css" version "2.14.0"
 }
 ```
 
@@ -17,7 +17,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.eriwen:gradle-css-plugin:2.12.0'
+        classpath 'com.eriwen:gradle-css-plugin:2.14.0'
     }
 }
 
