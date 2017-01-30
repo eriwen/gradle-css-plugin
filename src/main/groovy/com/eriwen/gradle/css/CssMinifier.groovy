@@ -50,8 +50,8 @@ class CssMinifier {
      */
     private void fixCalcFunc(File file) {
         String text = file.text
-        file.withWriter { w ->
-            w << addSpacesToOperatorsInCalcFunc(text)
+        file.withWriter(CHARSET) { writer ->
+            writer << addSpacesToOperatorsInCalcFunc(text)
         }
     }
 
@@ -61,20 +61,20 @@ class CssMinifier {
      * @return Result
      */
     private String addSpacesToOperatorsInCalcFunc(String string) {
-        StringBuffer sb = new StringBuffer()
-        Pattern p = ~/calc\([^\)]*\)/
-        Matcher m = p.matcher(string)
-        while (m.find()) {
-            String s = m.group()
+        StringBuffer stringBuffer = new StringBuffer()
+        Pattern pattern = ~/calc\([^\)]*\)/
+        Matcher matcher = pattern.matcher(string)
+        while (matcher.find()) {
+            String calcStr = matcher.group()
 
-            s = s.replaceAll("(?<=[%|px|em|rem|vw|\\d]+)\\+", " + ")
-            s = s.replaceAll("(?<=[%|px|em|rem|vw|\\d]+)\\-", " - ")
-            s = s.replaceAll("(?<=[%|px|em|rem|vw|\\d]+)\\*", " * ")
-            s = s.replaceAll("(?<=[%|px|em|rem|vw|\\d]+)\\/", " / ")
+            calcStr = calcStr.replaceAll(~/(?<=[%|px|em|rem|vw|\d]+)\+/, " + ")
+            calcStr = calcStr.replaceAll(~/(?<=[%|px|em|rem|vw|\d]+)-/ , " - ")
+            calcStr = calcStr.replaceAll(~/(?<=[%|px|em|rem|vw|\d]+)\*/, " * ")
+            calcStr = calcStr.replaceAll(~/(?<=[%|px|em|rem|vw|\d]+)\//, " / ")
 
-            m.appendReplacement(sb, s)
+            matcher.appendReplacement(stringBuffer, calcStr)
         }
-        m.appendTail(sb)
-        sb.toString()
+        matcher.appendTail(stringBuffer)
+        stringBuffer.toString()
     }
 }
