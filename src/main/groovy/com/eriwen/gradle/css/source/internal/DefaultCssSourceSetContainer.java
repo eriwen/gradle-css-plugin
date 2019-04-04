@@ -4,6 +4,7 @@ import com.eriwen.gradle.css.source.CssSourceSet;
 import com.eriwen.gradle.css.source.CssSourceSetContainer;
 import org.gradle.api.Project;
 import org.gradle.api.internal.AbstractNamedDomainObjectContainer;
+import org.gradle.api.internal.CollectionCallbackActionDecorator;
 import org.gradle.api.internal.file.FileResolver;
 import org.gradle.internal.reflect.Instantiator;
 
@@ -14,7 +15,7 @@ public class DefaultCssSourceSetContainer extends AbstractNamedDomainObjectConta
     private final FileResolver fileResolver;
 
     public DefaultCssSourceSetContainer(Project project, Instantiator instantiator, FileResolver fileResolver) {
-        super(CssSourceSet.class, instantiator);
+        super(CssSourceSet.class, instantiator, CollectionCallbackActionDecorator.NOOP);
         this.project = project;
         this.instantiator = instantiator;
         this.fileResolver = fileResolver;
