@@ -1,7 +1,9 @@
 package com.eriwen.gradle.css
 
-import com.eriwen.gradle.css.source.CssSourceSetContainer
-import com.eriwen.gradle.css.source.internal.DefaultCssSourceSetContainer
+import com.eriwen.gradle.css.source.CssSourceSet
+import com.eriwen.gradle.css.source.internal.DefaultCssSourceSet
+import org.gradle.api.NamedDomainObjectContainer
+import org.gradle.api.NamedDomainObjectFactory
 import org.gradle.api.Project
 import org.gradle.api.internal.file.FileResolver
 import org.gradle.internal.reflect.Instantiator
@@ -11,10 +13,15 @@ class CssExtension {
 
     public static final NAME = "css"
 
-    final CssSourceSetContainer source
+    final NamedDomainObjectContainer<CssSourceSet> source
 
     CssExtension(Project project, Instantiator instantiator, FileResolver fileResolver) {
-        source = instantiator.newInstance(DefaultCssSourceSetContainer, project, instantiator, fileResolver)
+        source = project.container(CssSourceSet.class, new NamedDomainObjectFactory<CssSourceSet>() {
+            @Override
+            CssSourceSet create(String name) {
+                return instantiator.newInstance(DefaultCssSourceSet.class, name, project, instantiator, fileResolver)
+            }
+        })
     }
 
     void source(Closure closure) {
