@@ -46,6 +46,7 @@ minifyCss {
     dest = "${buildDir}/all-min.css"
     yuicompressor { // Optional
         lineBreakPos = -1
+        charset = 'UTF-8'
     }
 }
 
@@ -89,6 +90,7 @@ csslint {
 - source = File to minify
 - dest = File for minified output
 - *(Optional)* yuicompressor.lineBreakPos = -1 (default) Insert a line break after the specified column number
+- *(Optional)* yuicompressor.charset = 'UTF-8' (default) Read the input file using specified charset (e.g. 'UTF-8', 'ISO-8859-1', etc.)
 
 ### gzipCss
 - source = File to compress

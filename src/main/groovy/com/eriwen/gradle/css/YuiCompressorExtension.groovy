@@ -20,4 +20,5 @@ import org.gradle.api.tasks.Input
 class YuiCompressorExtension {
     public static final NAME = "yuicompressor"
     @Input Integer lineBreakPos = -1
+    @Input String charset = CssMinifier.UTF8_CHARSET
 }

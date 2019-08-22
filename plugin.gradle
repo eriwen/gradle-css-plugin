@@ -45,6 +45,7 @@ task minify(type: com.eriwen.gradle.css.tasks.MinifyCssTask) {
     dest = file("${buildDir}/all-min.css")
     yuicompressor {
         lineBreakPos = 100
+        charset = 'UTF-8'
     }
 }
 
