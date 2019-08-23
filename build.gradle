@@ -225,6 +225,6 @@ def getPomConfiguration() {
 // download dependencies all at once, keeps downloads out of travis output
 task resolveAllDependencies {
     doLast {
-        configurations.all { it.resolve() }
+        configurations.findAll { it.canBeResolved } .each { it.resolve() }
     }
 }

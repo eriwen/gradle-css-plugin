@@ -25,6 +25,7 @@ class CssTask extends DefaultTask {
     private static final CssMinifier MINIFIER = new CssMinifier()
 
     Integer lineBreakPos = -1
+    String charset = CssMinifier.CHARSET
 
     @TaskAction
     def run() {
@@ -62,7 +63,7 @@ class CssTask extends DefaultTask {
             }
         }
 
-        MINIFIER.minifyCssFile(new File(tempPath), outputFiles[0] as File, lineBreakPos)
+        MINIFIER.minifyCssFile(new File(tempPath), outputFiles[0] as File, lineBreakPos, charset)
 
         ant.gzip(src: outputPath, destfile: "${outputPath}.gz")
         ant.move(file: "${outputPath}.gz", tofile: outputPath)

@@ -31,6 +31,6 @@ class MinifyCssTask extends SourceTask {
 
     @TaskAction
     def run() {
-        MINIFIER.minifyCssFile(source.singleFile, dest as File, project.yuicompressor.lineBreakPos)
+        MINIFIER.minifyCssFile(source.singleFile, dest as File, project.yuicompressor.lineBreakPos, project.yuicompressor.charset)
     }
 }

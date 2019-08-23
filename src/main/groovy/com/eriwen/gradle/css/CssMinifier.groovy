@@ -8,18 +8,18 @@ import com.yahoo.platform.yui.compressor.CssCompressor
  * @author Eric Wendelin
  */
 class CssMinifier {
-    private static final String CHARSET = 'UTF-8'
+    public static final String UTF8_CHARSET = 'UTF-8'
 
     /**
      * Given input and output files, minify input file and output to given output file
      * @param inputFile File to be minified
      * @param outputFile File for minified output
      */
-    void minifyCssFile(final File inputFile, final File outputFile, final Integer lineBreakPos) {
+    void minifyCssFile(final File inputFile, final File outputFile, final Integer lineBreakPos, final String charset) {
         Reader reader
         CssCompressor compressor
         try {
-            reader = new InputStreamReader(new FileInputStream(inputFile), CHARSET)
+            reader = new InputStreamReader(new FileInputStream(inputFile), charset)
             compressor = new CssCompressor(reader)
         } finally {
             // Close the input stream first, and then open the output stream,
@@ -31,7 +31,7 @@ class CssMinifier {
 
         Writer writer
         try {
-            writer = new OutputStreamWriter(new FileOutputStream(outputFile), CHARSET)
+            writer = new OutputStreamWriter(new FileOutputStream(outputFile), charset)
             compressor.compress(writer, lineBreakPos)
         } finally {
             if (writer != null) {
