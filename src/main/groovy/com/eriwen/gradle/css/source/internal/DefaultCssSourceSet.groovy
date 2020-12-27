@@ -7,6 +7,7 @@ import org.gradle.api.Project
 import org.gradle.api.file.FileCollection
 import org.gradle.api.file.SourceDirectorySet
 import org.gradle.api.internal.file.DefaultSourceDirectorySet
+import org.gradle.api.internal.file.DefaultSourceDirectorySetFactory
 import org.gradle.api.internal.file.FileResolver
 import org.gradle.internal.reflect.Instantiator
 import org.gradle.util.ConfigureUtil
@@ -24,7 +25,9 @@ class DefaultCssSourceSet implements CssSourceSet {
     DefaultCssSourceSet(String name, Project project, Instantiator instantiator, FileResolver fileResolver) {
         this.name = name
         this.displayName = GUtil.toWords(name)
-        if (GradleVersion.current().compareTo(GradleVersion.version("2.12")) >= 0) {
+        if (GradleVersion.current().compareTo(GradleVersion.version("6.4")) >= 0) {
+            this.css = new DefaultSourceDirectorySetFactory(project.getObjects()).create(name, String.format("%s CSS source", displayName))
+        } else if (GradleVersion.current().compareTo(GradleVersion.version("2.12")) >= 0) {
             Class fileTreeFactory = Class.forName("org.gradle.api.internal.file.collections.DefaultDirectoryFileTreeFactory")
             def directoryFileTreeFactory = fileTreeFactory.getConstructor().newInstance()
             this.css = new DefaultSourceDirectorySet(name, String.format("%s CSS source", displayName), fileResolver, directoryFileTreeFactory)
