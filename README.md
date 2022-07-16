@@ -1,4 +1,6 @@
-# Quick Start [![Build Status](https://secure.travis-ci.org/eriwen/gradle-css-plugin.png)](http://travis-ci.org/eriwen/gradle-css-plugin)
+# This plugin is no longer maintained!
+
+# Gradle CSS Plugin
 
 Managing your CSS in a [Gradle](http://gradle.org) build is super easy now! Just add this to your *build.gradle* file:
 
