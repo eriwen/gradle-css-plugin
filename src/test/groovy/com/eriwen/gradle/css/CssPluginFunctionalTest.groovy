@@ -29,7 +29,7 @@ class CssPluginFunctionalTest extends FunctionalSpec {
         and:
         tempProjectDir.newFolder('src', 'custom', 'css')
         tempProjectDir.newFile("src/custom/css/file1.css") << "#id1 { color: green; }"
-        tempProjectDir.newFile("src/custom/css/file2.css") << ".class1 { color: red; }"
+        tempProjectDir.newFile("src/custom/css/file2.css") << ".class1 { color: red; width: calc(90% + 50px); }"
 
         when:
         BuildResult result = build('minifyCss')
@@ -38,7 +38,7 @@ class CssPluginFunctionalTest extends FunctionalSpec {
         File minifiedCss = new File(projectDir, 'build/all-min.css')
         minifiedCss.exists()
         minifiedCss.text.indexOf('#id1{color:green}') > -1
-        minifiedCss.text.indexOf('.class1{color:red}') > -1
+        minifiedCss.text.indexOf('.class1{color:red;width:calc(90% + 50px)}') > -1
 
         and:
         result.task(':combineCss').outcome == TaskOutcome.SUCCESS
